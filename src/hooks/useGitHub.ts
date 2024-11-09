@@ -26,29 +26,29 @@ export function useGitHub() {
       console.log(filteredData);
       
       // Fetch pull requests count and README for each repo
-      // const reposWithDetails = await Promise.all(
-      //   data.map(async (repo) => {
-      //     const [pulls, readme] = await Promise.all([
-      //       octokit.rest.pulls.list({
-      //         owner: repo.owner.login,
-      //         repo: repo.name,
-      //         state: 'open'
-      //       }),
-      //       octokit.rest.repos.getReadme({
-      //         owner: repo.owner.login,
-      //         repo: repo.name
-      //       }).catch(() => null)
-      //     ]);
+      const reposWithDetails = await Promise.all(
+        filteredData.map(async (repo) => {
+          const [pulls, readme] = await Promise.all([
+            octokit.rest.pulls.list({
+              owner: repo.owner.login,
+              repo: repo.name,
+              state: 'open'
+            }),
+            octokit.rest.repos.getReadme({
+              owner: repo.owner.login,
+              repo: repo.name
+            }).catch(() => null)
+          ]);
 
-      //     return {
-      //       ...repo,
-      //       pulls_count: pulls.data.length,
-      //       readme: readme ? atob(readme.data.content) : ''
-      //     };
-      //   })
-      // );
+          return {
+            ...repo,
+            pulls_count: pulls.data.length,
+            readme: readme ? atob(readme.data.content) : ''
+          };
+        })
+      );
 
-      // setRepos(reposWithDetails);
+      setRepos(reposWithDetails);
       setError(null);
     } catch (err) {
       setError('Failed to fetch repositories');
