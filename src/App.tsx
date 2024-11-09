@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Github, Loader } from 'lucide-react';
 import { RepoCard } from './components/RepoCard';
 import { SearchBar } from './components/SearchBar';
@@ -23,7 +23,7 @@ function App() {
   const filteredAndSortedRepos = useMemo(() => {
     const filtered = searchRepos(repos, searchTerm);
     return sortRepos(filtered, selectedSort);
-  }, [repos, searchTerm, selectedSort]);
+  }, [repos, searchTerm, selectedSort, searchRepos, sortRepos]);
 
   if (error) {
     return (

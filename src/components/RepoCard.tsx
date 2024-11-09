@@ -1,4 +1,3 @@
-import React from 'react';
 import { GitPullRequest, Star, Clock } from 'lucide-react';
 import { Repository } from '../types';
 import { formatDistanceToNow } from 'date-fns';
