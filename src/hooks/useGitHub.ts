@@ -16,14 +16,12 @@ export function useGitHub() {
       setLoading(true);
       const { data } = await octokit.rest.repos.listForAuthenticatedUser({
         per_page: 1000,
-        sort: 'updated',
-        direction: 'desc'
       });
 
       
-      // Filter by owner = 'Bennentterprise'
+      // TODO: Temp fix, remove GumbandApp repos. Should include a UI element to be able to set this as a user preference.
       const filteredData = data.filter(repo => repo.owner.login.toLowerCase() !== 'gumbandapp'.toLowerCase());
-      console.log(filteredData);
+      // console.log(filteredData);
       
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
@@ -48,7 +46,7 @@ export function useGitHub() {
         })
       );
 
-      setRepos(reposWithDetails);
+      setRepos(reposWithDetails as Repository[]);
       setError(null);
     } catch (err) {
       setError('Failed to fetch repositories');
