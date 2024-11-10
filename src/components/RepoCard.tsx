@@ -8,7 +8,7 @@ interface RepoCardProps {
 
 export function RepoCard({ repo }: RepoCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48">
       <div className="flex justify-between items-start mb-4">
         <h3 className="text-xl font-semibold text-blue-600 hover:text-blue-800">
           <a href={repo.html_url} target="_blank" rel="noopener noreferrer">

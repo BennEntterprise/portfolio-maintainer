@@ -11,3 +11,5 @@
 [] Feat: Add an icon to show if a card has a README.md
 
 # Done
+
+[x] 2024-11-10 T 18:00:58 Set a minimum height for the card
