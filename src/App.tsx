@@ -25,6 +25,9 @@ function App() {
     return sortRepos(filtered, selectedSort);
   }, [repos, searchTerm, selectedSort, searchRepos, sortRepos]);
 
+  const privateRepos = useMemo(() => repos.filter(repo => repo.private), [repos]);
+  const publicRepos = useMemo(() => repos.filter(repo => !repo.private),[repos]);
+
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -43,6 +46,11 @@ function App() {
           <div className="flex items-center">
             <Github className="w-8 h-8 mr-3" />
             <h1 className="text-3xl font-bold text-gray-900">GitHub Explorer</h1>
+            <div className="ml-5" >
+              <p>Total Repos: {repos.length}</p>
+              <p>Private Repos: {privateRepos.length}</p>
+              <p>Public Repos: {publicRepos.length}</p>
+            </div>
           </div>
         </div>
 
@@ -61,6 +69,10 @@ function App() {
             />
           </div>
         </div>
+
+        {/* <div>
+          <pre>{JSON.stringify(repos[0], null, 2)}</pre>
+        </div> */}
 
         {loading ? (
           <div className="flex items-center justify-center h-64">

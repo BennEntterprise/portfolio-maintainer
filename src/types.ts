@@ -9,6 +9,7 @@ export interface Repository {
   stargazers_count: number;
   readme?: string;
   pulls_count?: number;
+  private: boolean;
 }
 
 export interface SortOption {
