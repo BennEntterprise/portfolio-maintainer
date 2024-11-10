@@ -7,12 +7,12 @@ import { useGitHub } from './hooks/useGitHub';
 import { SortOption } from './types';
 
 const sortOptions: SortOption[] = [
-  { label: 'Most Pull Requests', value: 'pulls', direction: 'desc' },
-  { label: 'Least Pull Requests', value: 'pulls', direction: 'asc' },
-  { label: 'Recently Updated', value: 'updated', direction: 'desc' },
   { label: 'Least Recently Updated', value: 'updated', direction: 'asc' },
-  { label: 'Most Stars', value: 'stars', direction: 'desc' },
+  { label: 'Recently Updated', value: 'updated', direction: 'desc' },
+  { label: 'Least Pull Requests', value: 'pulls', direction: 'asc' },
+  { label: 'Most Pull Requests', value: 'pulls', direction: 'desc' },
   { label: 'Least Stars', value: 'stars', direction: 'asc' },
+  { label: 'Most Stars', value: 'stars', direction: 'desc' },
 ];
 
 function App() {
