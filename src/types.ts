@@ -10,6 +10,7 @@ export interface Repository {
   readme?: string;
   pulls_count?: number;
   private: boolean;
+  size: number
 }
 
 export interface SortOption {

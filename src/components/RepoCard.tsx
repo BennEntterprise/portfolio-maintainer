@@ -1,4 +1,4 @@
-import { GitPullRequest, Star, Clock } from 'lucide-react';
+import { BookOpenCheck, Copyright, GitPullRequest, Star, Clock, ListTodo, MemoryStick, Eye, EyeOff } from 'lucide-react';
 import { Repository } from '../types';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -7,6 +7,7 @@ interface RepoCardProps {
 }
 
 export function RepoCard({ repo }: RepoCardProps) {
+  const showMeta = false;
   return (
     <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48">
       <div className="flex justify-between items-start mb-4">
@@ -30,6 +31,24 @@ export function RepoCard({ repo }: RepoCardProps) {
       {repo.description && (
         <p className="text-gray-600 mb-4">{repo.description}</p>
       )}
+
+      {showMeta && <div>
+        <div className="flex flex-row">
+          <span><ListTodo  /></span><span className='px-2'>Has Todo.md</span>
+        </div>
+        <div className='flex flex-row'>
+          <span><BookOpenCheck /></span><span className='px-2'>Has README.md</span>
+        </div>
+        <div className='flex flex-row'>
+          <span><Copyright /></span><span className='px-2'>Has License</span>
+        </div>
+        <div className='flex flex-row'>
+          <span><MemoryStick /></span><span className='px-2'>{(repo.size/1000)} KB </span>
+        </div>
+        <div className='flex flex-row'>
+          <span><Eye /></span><span><EyeOff/></span><span className='px-2'>{(repo.size/1000)} KB </span>
+        </div>
+      </div>}
       
       <div className="flex justify-end items-center text-sm text-gray-500">
         <Clock className="w-4 h-4 mr-1" />
