@@ -1,4 +1,16 @@
-import { BookOpenCheck, Copyright, GitPullRequest, Star, Clock, ListTodo, MemoryStick, Eye, EyeOff } from 'lucide-react';
+import { 
+  BookOpenCheck, 
+  Copyright, 
+  GitPullRequest, 
+  Star,
+  Container, 
+  Clock, 
+  ListTodo,
+  MemoryStick, 
+  Eye,
+  EyeOff,
+  Unplug
+} from 'lucide-react';
 import { Repository } from '../types';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -47,6 +59,12 @@ export function RepoCard({ repo }: RepoCardProps) {
         </div>
         <div className='flex flex-row'>
           <span><Eye /></span><span><EyeOff/></span><span className='px-2'>{(repo.size/1000)} KB </span>
+        </div>
+        <div className='flex flex-row'>
+          <span><Container /></span><span className='px-2'>Dockerized</span>
+        </div>
+        <div className='flex flex-row'>
+          <span><Unplug /></span><span className='px-2'>DevContainer</span>
         </div>
       </div>}
       

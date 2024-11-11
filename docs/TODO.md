@@ -2,8 +2,8 @@
 
 [] Refactor: The Dropdown that handles ordering should be converted to chips/radio buttons so that it is easier to see all options.
 [] Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)
-[] Feat: Add an icon for devcontainers
-[] Feat: Add an icon for Dockerfile
+[] Feat: Redux so that there is only one call. Trigger the call on button press
+[] Feat: Left Sidebar Checkboxes to handle filtering
 
 # Done
 
@@ -15,3 +15,5 @@
 [x] 2024-11-10 T 20:18:50 Feat: A "size" as a repo property and include it in the card.
 [x] 2024-11-10 T 20:21:19 Feat: Add an icon to indicate if there is a /docs/Todo.md file (case insensitive)
 [x] 2024-11-10 T 20:23:15 Feat: Add icon to the card for private vs not private, (might need the designation "private" or   "visibility": "private")
+[x] Feat: Add an icon for Dockerfile
+[x] Feat: Add an icon for devcontainers
