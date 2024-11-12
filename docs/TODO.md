@@ -1,9 +1,19 @@
 # Todo
 
+## High Priority Todos
+
+[] Feat: Redux so that there is only one call. Trigger the fetch repos call on button press.
+[] Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)s
+
+## Medium Priority Todos
+
+[] Feat: Left Sidebar Checkboxes to handle filtering.
+[] Add husky pre-commit hooks (lint and build)
+
+## Low Priority Todos
+
 [] Refactor: The Dropdown that handles ordering should be converted to chips/radio buttons so that it is easier to see all options.
-[] Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)
-[] Feat: Redux so that there is only one call. Trigger the call on button press
-[] Feat: Left Sidebar Checkboxes to handle filtering
+[] Feat: Use AGGrid to show all of the above items as a grid list, not just as cards.
 
 # Done
 
