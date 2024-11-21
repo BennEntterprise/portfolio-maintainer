@@ -1,16 +1,18 @@
-import { Github, Loader } from "lucide-react";
+import 'react-tooltip/dist/react-tooltip.css'
+import { FilteringOptions } from "./components/FilteringOptions";
+import { FilterState } from "./redux/filteringSlice";
+import { Github, Loader } from 'lucide-react';
+import { RepoCard } from './components/RepoCard';
+import { Repository, SortOption } from "./types";
+import { RootState } from "./redux/store";
+import { SearchBar } from "./components/SearchBar";
+import { setRepos as setReposInRedux } from "./redux/repoSlice";
+import { SortSelect } from "./components/SortSelect";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FilteringOptions } from "./components/FilteringOptions";
-import { RepoCard } from "./components/RepoCard";
-import { SearchBar } from "./components/SearchBar";
-import { SortSelect } from "./components/SortSelect";
-import { useGitHub } from "./hooks/useGitHub";
-import { FilterState } from "./redux/filteringSlice";
-import { setRepos as setReposInRedux } from "./redux/repoSlice";
-import { RootState } from "./redux/store";
-import { Repository, SortOption } from "./types";
-import 'react-tooltip/dist/react-tooltip.css'
+import { useGitHub } from './hooks/useGitHub';
+import Pager from './components/Pager';
+
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -25,8 +27,12 @@ function App() {
   const { repos, loading, error, fetchRepos } = useGitHub();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
-  const filterState = useSelector((state: RootState) => state.filtering);
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  
   const reposRedux = useSelector((state: RootState) => state.repo.value);
+  const filterState = useSelector((state: RootState) => state.filtering);
+  
   const dispatch = useDispatch();
 
   // We set the repos gathered from the GitHub API
@@ -111,6 +117,11 @@ function App() {
     filterState,
   ]);
 
+  const paginatedRepos = useMemo(() => {
+    const startIndex = (currentPage - 1) * entriesPerPage;
+    return filteredAndSortedRepos.slice(startIndex, startIndex + entriesPerPage);
+  }, [filteredAndSortedRepos, currentPage, entriesPerPage]);
+
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -152,6 +163,13 @@ function App() {
             />
           </div>
         </div>
+        <Pager
+          totalEntries={filteredAndSortedRepos.length}
+          entriesPerPage={entriesPerPage}
+          currentPage={currentPage}
+          onEntriesPerPageChange={setEntriesPerPage}
+          onPageChange={setCurrentPage}
+      />
 
         {/* <pre>{JSON.stringify(reposRedux[0], null, 2)}</pre> */}
         {reposRedux.length > 0 && <FilteringOptions />}
@@ -169,7 +187,7 @@ function App() {
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredAndSortedRepos.map(repo => (
+            {paginatedRepos.map(repo => (
               <RepoCard key={repo.id} repo={repo} />
             ))}
           </div>
