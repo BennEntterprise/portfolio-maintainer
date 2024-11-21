@@ -5,6 +5,7 @@ import { SearchBar } from './components/SearchBar';
 import { SortSelect } from './components/SortSelect';
 import { useGitHub } from './hooks/useGitHub';
 import { SortOption } from './types';
+import Pager from './components/Pager';
 
 const sortOptions: SortOption[] = [
   { label: 'Least Recently Updated', value: 'updated', direction: 'asc' },
@@ -19,11 +20,19 @@ function App() {
   const { repos, loading, error, sortRepos, searchRepos } = useGitHub();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredAndSortedRepos = useMemo(() => {
     const filtered = searchRepos(repos, searchTerm);
     return sortRepos(filtered, selectedSort);
   }, [repos, searchTerm, selectedSort, searchRepos, sortRepos]);
+
+
+  const paginatedRepos = useMemo(() => {
+    const startIndex = (currentPage - 1) * entriesPerPage;
+    return filteredAndSortedRepos.slice(startIndex, startIndex + entriesPerPage);
+  }, [filteredAndSortedRepos, currentPage, entriesPerPage]);
 
   const privateRepos = useMemo(() => repos.filter(repo => repo.private), [repos]);
   const publicRepos = useMemo(() => repos.filter(repo => !repo.private),[repos]);
@@ -69,6 +78,13 @@ function App() {
             />
           </div>
         </div>
+        <Pager
+          totalEntries={filteredAndSortedRepos.length}
+          entriesPerPage={entriesPerPage}
+          currentPage={currentPage}
+          onEntriesPerPageChange={setEntriesPerPage}
+          onPageChange={setCurrentPage}
+      />
 
         {/* <div>
           <pre>{JSON.stringify(repos[0], null, 2)}</pre>
