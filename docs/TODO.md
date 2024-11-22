@@ -7,7 +7,7 @@
 
 ## Medium Priority Todos
 
-[] Feat: Left Sidebar Checkboxes to handle filtering.
+[] Feat: Left Sidebar Checkboxes to handle filtering. (archive/non-archive, organization)
 [] Add husky pre-commit hooks (lint and build)
 
 ## Low Priority Todos

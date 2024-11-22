@@ -19,13 +19,19 @@ export function useGitHub() {
       });
 
       
-      // TODO: Temp fix, remove GumbandApp repos. Should include a UI element to be able to set this as a user preference.
-      const filteredData = data.filter(repo => repo.owner.login.toLowerCase() !== 'gumbandapp'.toLowerCase());
-      // console.log(filteredData);
+      // TODO: Temp fix, remove repos Kyle doesn't care about.
+      // Should include a UI element to be able to set this as a user preference.
+      const filteredData = data.filter(repo => {
+        const excludedOrgs = ['gumbandapp', 'danitawalton'];
+        return !excludedOrgs.includes(repo.owner.login.toLowerCase());
+      });
+
+      // TODO: Turn this into an interactive filter too.
+      const nonArchivedData = filteredData.filter(repo => !repo.archived);
       
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
-        filteredData.map(async (repo) => {
+        nonArchivedData.map(async (repo) => {
           const [pulls, readme] = await Promise.all([
             octokit.rest.pulls.list({
               owner: repo.owner.login,
