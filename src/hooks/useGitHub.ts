@@ -17,21 +17,10 @@ export function useGitHub() {
       const { data } = await octokit.rest.repos.listForAuthenticatedUser({
         per_page: 1000,
       });
-
-      
-      // TODO: Temp fix, remove repos Kyle doesn't care about.
-      // Should include a UI element to be able to set this as a user preference.
-      const filteredData = data.filter(repo => {
-        const excludedOrgs = ['gumbandapp', 'danitawalton'];
-        return !excludedOrgs.includes(repo.owner.login.toLowerCase());
-      });
-
-      // TODO: Turn this into an interactive filter too.
-      const nonArchivedData = filteredData.filter(repo => !repo.archived);
-      
+     
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
-        nonArchivedData.map(async (repo) => {
+        data.map(async (repo) => {
           const [pulls, readme] = await Promise.all([
             octokit.rest.pulls.list({
               owner: repo.owner.login,

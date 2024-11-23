@@ -5,6 +5,9 @@ import { SearchBar } from './components/SearchBar';
 import { SortSelect } from './components/SortSelect';
 import { useGitHub } from './hooks/useGitHub';
 import { SortOption } from './types';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRepos as setReposInRedux } from './redux/repoSlice';
+import { RootState } from './redux/store';
 
 const sortOptions: SortOption[] = [
   { label: 'Least Recently Updated', value: 'updated', direction: 'asc' },
@@ -19,14 +22,21 @@ function App() {
   const { repos, loading, error, sortRepos, searchRepos } = useGitHub();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
+  const reposRedux = useSelector((state: RootState) => state.repo.value);
+  
+  // Take the Repos Returned from the Github Hook, and set them in Redux
+  const dispatch = useDispatch();
+  dispatch(setReposInRedux(repos));
 
+  // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
-    const filtered = searchRepos(repos, searchTerm);
+    const filtered = searchRepos(reposRedux, searchTerm);
     return sortRepos(filtered, selectedSort);
-  }, [repos, searchTerm, selectedSort, searchRepos, sortRepos]);
+  }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos]);
 
-  const privateRepos = useMemo(() => repos.filter(repo => repo.private), [repos]);
-  const publicRepos = useMemo(() => repos.filter(repo => !repo.private),[repos]);
+  // Maintain som Stats for the UI
+  const privateRepos = useMemo(() => reposRedux.filter(repo => repo.private), [reposRedux]);
+  const publicRepos = useMemo(() => reposRedux.filter(repo => !repo.private),[reposRedux]);
 
   if (error) {
     return (
@@ -47,7 +57,7 @@ function App() {
             <Github className="w-8 h-8 mr-3" />
             <h1 className="text-3xl font-bold text-gray-900">GitHub Explorer</h1>
             <div className="ml-5" >
-              <p>Total Repos: {repos.length}</p>
+              <p>Total Repos: {reposRedux.length}</p>
               <p>Private Repos: {privateRepos.length}</p>
               <p>Public Repos: {publicRepos.length}</p>
             </div>
