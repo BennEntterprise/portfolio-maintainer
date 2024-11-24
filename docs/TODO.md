@@ -2,7 +2,6 @@
 
 ## High Priority Todos
 
-[] Feat: Redux so that there is only one call. Trigger the fetch repos call on button press.
 [] Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)s
 
 ## Medium Priority Todos
@@ -27,3 +26,4 @@
 [x] 2024-11-10 T 20:23:15 Feat: Add icon to the card for private vs not private, (might need the designation "private" or   "visibility": "private")
 [x] Feat: Add an icon for Dockerfile
 [x] Feat: Add an icon for devcontainers
+[x] Feat: Redux so that there is only one call. Trigger the fetch repos call on button press.

@@ -19,7 +19,7 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
-  const { repos, loading, error, sortRepos, searchRepos } = useGitHub();
+  const { repos, loading, error, fetchRepos, sortRepos, searchRepos } = useGitHub();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const reposRedux = useSelector((state: RootState) => state.repo.value);
@@ -33,10 +33,6 @@ function App() {
     const filtered = searchRepos(reposRedux, searchTerm);
     return sortRepos(filtered, selectedSort);
   }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos]);
-
-  // Maintain som Stats for the UI
-  const privateRepos = useMemo(() => reposRedux.filter(repo => repo.private), [reposRedux]);
-  const publicRepos = useMemo(() => reposRedux.filter(repo => !repo.private),[reposRedux]);
 
   if (error) {
     return (
@@ -53,14 +49,13 @@ function App() {
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between w-full">
             <Github className="w-8 h-8 mr-3" />
             <h1 className="text-3xl font-bold text-gray-900">GitHub Explorer</h1>
-            <div className="ml-5" >
-              <p>Total Repos: {reposRedux.length}</p>
-              <p>Private Repos: {privateRepos.length}</p>
-              <p>Public Repos: {publicRepos.length}</p>
-            </div>
+            <button 
+              className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
+              onClick={fetchRepos}
+            >Fetch Repos</button>
           </div>
         </div>
 

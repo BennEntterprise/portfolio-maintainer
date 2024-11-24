@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Octokit } from 'octokit';
 import { Repository, SortOption } from '../types';
 
@@ -8,7 +8,7 @@ const octokit = new Octokit({
 
 export function useGitHub() {
   const [repos, setRepos] = useState<Repository[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchRepos = async () => {
@@ -77,15 +77,12 @@ export function useGitHub() {
     );
   };
 
-  useEffect(() => {
-    fetchRepos();
-  }, []);
-
   return {
     repos,
     loading,
     error,
     sortRepos,
-    searchRepos
+    searchRepos,
+    fetchRepos,
   };
 }
