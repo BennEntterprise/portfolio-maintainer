@@ -7,6 +7,7 @@ import { useGitHub } from "./hooks/useGitHub";
 import { SortOption } from "./types";
 import { useDispatch, useSelector } from "react-redux";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
+import { setInitialOrgs } from "./redux/filteringSlice";
 import { RootState } from "./redux/store";
 
 const sortOptions: SortOption[] = [
@@ -66,6 +67,10 @@ function App() {
     }, []);
     return orgs;
   }, [repos]);
+
+  useEffect(() => {
+    dispatch(setInitialOrgs(availableOrgsList));
+  })
 
   if (error) {
     return (
