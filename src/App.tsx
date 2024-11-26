@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Github, Loader } from 'lucide-react';
 import { RepoCard } from './components/RepoCard';
 import { SearchBar } from './components/SearchBar';
@@ -24,15 +24,45 @@ function App() {
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const reposRedux = useSelector((state: RootState) => state.repo.value);
   
+  // Some Local State for Filtering 
+  const [ publicCheckbox, setPublicCheckbox ] = useState(true);
+  const [ privateCheckbox, setPrivateCheckbox ] = useState(true);
+  const [ active, setActive ] = useState(true);
+  const [ archive, setArchive ] = useState(true);
+  const [ selectedOrgs, setSelectedOrgs ] = useState<Record<string, boolean>>({});
+
   // Take the Repos Returned from the Github Hook, and set them in Redux
   const dispatch = useDispatch();
-  dispatch(setReposInRedux(repos));
+
+  useEffect(() => {
+    dispatch(setReposInRedux(repos));
+  }, [dispatch, repos])
+
+  useEffect(() => {
+    const orgs = repos.reduce((acc: Record<string, boolean>, repo) => {
+      const orgName = repo.full_name.split('/')[0];
+      acc[orgName] = true;
+      return acc;
+    }, {});
+    setSelectedOrgs(orgs);
+  },[repos])
 
   // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
     const filtered = searchRepos(reposRedux, searchTerm);
     return sortRepos(filtered, selectedSort);
   }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos]);
+
+  const availableOrgsList = useMemo(() => {
+    const orgs = repos.reduce((acc: string[], repo) => {
+      const orgName = repo.full_name.split('/')[0];
+      if (!acc.includes(orgName)) {
+        acc.push(orgName);
+      }
+      return acc;
+    }, []);
+    return orgs;
+  },[repos])
 
   if (error) {
     return (
@@ -74,10 +104,89 @@ function App() {
             />
           </div>
         </div>
+        
+        {/* <pre>{JSON.stringify(reposRedux[0], null, 2)}</pre> */}
 
-        {/* <div>
-          <pre>{JSON.stringify(repos[0], null, 2)}</pre>
-        </div> */}
+        {/*  Filtering Component*/}
+        <div className="mb-8"></div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Filters</h2>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div>
+              <h3 className="text-lg font-medium text-gray-700 mb-2">Visibility</h3>
+              <div className="flex items-center mb-2">
+                <input 
+                  type="checkbox" 
+                  id="public" 
+                  name="visibility" 
+                  value="public" 
+                  className="mr-2" 
+                  checked={publicCheckbox}
+                  onChange={() => setPublicCheckbox(!publicCheckbox)}
+                  />
+                <label htmlFor="public" className="text-gray-700">Public</label>
+              </div>
+              <div className="flex items-center">
+                <input 
+                  type="checkbox" 
+                  id="private" 
+                  name="visibility" 
+                  value="private" 
+                  className="mr-2" 
+                  checked={privateCheckbox}
+                  onChange={() => setPrivateCheckbox(!privateCheckbox)}
+                  />
+                <label htmlFor="private" className="text-gray-700">Private</label>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-medium text-gray-700 mb-2">Status</h3>
+              <div className="flex items-center mb-2">
+                <input 
+                  type="checkbox" 
+                  id="active" 
+                  name="status" 
+                  className="mr-2" 
+                  checked={active}
+                  onChange={() => setActive(!active)}
+                  />
+                <label htmlFor="active" className="text-gray-700">Active</label>
+              </div>
+              <div className="flex items-center">
+                <input 
+                  type="checkbox" 
+                  id="archive" 
+                  name="status" 
+                  className="mr-2" 
+                  checked={archive}
+                  onChange={() => setArchive(!archive)}
+                  />
+                <label htmlFor="archive" className="text-gray-700">Archive</label>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-medium text-gray-700 mb-2">Organization</h3>
+              {availableOrgsList.map(org => (
+                <div key={org} className="flex items-center mb-2">
+                  <input 
+                    type="checkbox" 
+                    id={org} 
+                    name="organization" 
+                    className="mr-2" 
+                    value={org} 
+                    checked={selectedOrgs[org]}
+                    onChange={(e) => {
+                      setSelectedOrgs({
+                        ...selectedOrgs,
+                        [org]: e.target.checked
+                      })
+                    }}
+                    />
+                  <label htmlFor={org} className="text-gray-700">{org}</label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {loading ? (
           <div className="flex items-center justify-center h-64">
@@ -91,7 +200,6 @@ function App() {
           </div>
         )}
       </div>
-    </div>
   );
 }
 

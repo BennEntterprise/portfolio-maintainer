@@ -36,7 +36,8 @@ export function useGitHub() {
           return {
             ...repo,
             pulls_count: pulls.data.length,
-            readme: readme ? atob(readme.data.content) : ''
+            readme: readme ? atob(readme.data.content) : '',
+            organization: repo.full_name.split('/')[0]
           };
         })
       );
