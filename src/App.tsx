@@ -7,7 +7,14 @@ import { useGitHub } from "./hooks/useGitHub";
 import { SortOption } from "./types";
 import { useDispatch, useSelector } from "react-redux";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
-import { setInitialOrgs } from "./redux/filteringSlice";
+import {
+  setInitialOrgs,
+  toggleActive,
+  toggleArchive,
+  toggleOrg,
+  togglePrivate,
+  togglePublic,
+} from "./redux/filteringSlice";
 import { RootState } from "./redux/store";
 
 const sortOptions: SortOption[] = [
@@ -22,17 +29,6 @@ const sortOptions: SortOption[] = [
 function App() {
   const { repos, loading, error, fetchRepos, sortRepos, searchRepos } =
     useGitHub();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
-  const reposRedux = useSelector((state: RootState) => state.repo.value);
-
-  // Some Local State for Filtering
-  const [publicCheckbox, setPublicCheckbox] = useState(true);
-  const [privateCheckbox, setPrivateCheckbox] = useState(true);
-  const [active, setActive] = useState(true);
-  const [archive, setArchive] = useState(true);
-  const [selectedOrgs, setSelectedOrgs] = useState<Record<string, boolean>>({});
-
   // Take the Repos Returned from the Github Hook, and set them in Redux
   const dispatch = useDispatch();
 
@@ -40,14 +36,26 @@ function App() {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
 
-  useEffect(() => {
-    const orgs = repos.reduce((acc: Record<string, boolean>, repo) => {
-      const orgName = repo.full_name.split("/")[0];
-      acc[orgName] = true;
-      return acc;
-    }, {});
-    setSelectedOrgs(orgs);
-  }, [repos]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
+  const reposRedux = useSelector((state: RootState) => state.repo.value);
+
+  // Some Local State for Filtering
+  const archiveCheckbox = useSelector(
+    (state: RootState) => state.filtering.archiveCheckbox
+  );
+  const activeCheckbox = useSelector(
+    (state: RootState) => state.filtering.activeCheckbox
+  );
+  const publicCheckbox = useSelector(
+    (state: RootState) => state.filtering.publicCheckbox
+  );
+  const privateCheckbox = useSelector(
+    (state: RootState) => state.filtering.privateCheckbox
+  );
+  const selectedOrgs = useSelector(
+    (state: RootState) => state.filtering.selectedOrgs
+  );
 
   const showFilters = useMemo(() => reposRedux.length > 0, [reposRedux]);
 
@@ -70,7 +78,7 @@ function App() {
 
   useEffect(() => {
     dispatch(setInitialOrgs(availableOrgsList));
-  })
+  }, [reposRedux, availableOrgsList, dispatch]);
 
   if (error) {
     return (
@@ -135,7 +143,7 @@ function App() {
                     value="public"
                     className="mr-2"
                     checked={publicCheckbox}
-                    onChange={() => setPublicCheckbox(!publicCheckbox)}
+                    onChange={() => dispatch(togglePublic())}
                   />
                   <label htmlFor="public" className="text-gray-700">
                     Public
@@ -149,7 +157,7 @@ function App() {
                     value="private"
                     className="mr-2"
                     checked={privateCheckbox}
-                    onChange={() => setPrivateCheckbox(!privateCheckbox)}
+                    onChange={() => dispatch(togglePrivate())}
                   />
                   <label htmlFor="private" className="text-gray-700">
                     Private
@@ -166,8 +174,8 @@ function App() {
                     id="active"
                     name="status"
                     className="mr-2"
-                    checked={active}
-                    onChange={() => setActive(!active)}
+                    checked={activeCheckbox}
+                    onChange={() => dispatch(toggleActive())}
                   />
                   <label htmlFor="active" className="text-gray-700">
                     Active
@@ -179,8 +187,8 @@ function App() {
                     id="archive"
                     name="status"
                     className="mr-2"
-                    checked={archive}
-                    onChange={() => setArchive(!archive)}
+                    checked={archiveCheckbox}
+                    onChange={() => dispatch(toggleArchive())}
                   />
                   <label htmlFor="archive" className="text-gray-700">
                     Archive
@@ -201,10 +209,7 @@ function App() {
                       value={org}
                       checked={selectedOrgs[org]}
                       onChange={(e) => {
-                        setSelectedOrgs({
-                          ...selectedOrgs,
-                          [org]: e.target.checked,
-                        });
+                        dispatch(toggleOrg(e.target.value));
                       }}
                     />
                     <label htmlFor={org} className="text-gray-700">
