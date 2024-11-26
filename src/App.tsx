@@ -1,21 +1,14 @@
-import { useState, useMemo, useEffect } from "react";
 import { Github, Loader } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { FilteringOptions } from "./components/FilteringOptions";
 import { RepoCard } from "./components/RepoCard";
 import { SearchBar } from "./components/SearchBar";
 import { SortSelect } from "./components/SortSelect";
 import { useGitHub } from "./hooks/useGitHub";
-import { SortOption } from "./types";
-import { useDispatch, useSelector } from "react-redux";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
-import {
-  setInitialOrgs,
-  toggleActive,
-  toggleArchive,
-  toggleOrg,
-  togglePrivate,
-  togglePublic,
-} from "./redux/filteringSlice";
 import { RootState } from "./redux/store";
+import { SortOption } from "./types";
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -27,58 +20,21 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
-  const { repos, loading, error, fetchRepos, sortRepos, searchRepos } =
-    useGitHub();
-  // Take the Repos Returned from the Github Hook, and set them in Redux
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
+  const reposRedux = useSelector((state: RootState) => state.repo.value);
+  const { repos, loading, error, fetchRepos, sortRepos, searchRepos } = useGitHub();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
-  const reposRedux = useSelector((state: RootState) => state.repo.value);
-
-  // Some Local State for Filtering
-  const archiveCheckbox = useSelector(
-    (state: RootState) => state.filtering.archiveCheckbox
-  );
-  const activeCheckbox = useSelector(
-    (state: RootState) => state.filtering.activeCheckbox
-  );
-  const publicCheckbox = useSelector(
-    (state: RootState) => state.filtering.publicCheckbox
-  );
-  const privateCheckbox = useSelector(
-    (state: RootState) => state.filtering.privateCheckbox
-  );
-  const selectedOrgs = useSelector(
-    (state: RootState) => state.filtering.selectedOrgs
-  );
-
-  const showFilters = useMemo(() => reposRedux.length > 0, [reposRedux]);
-
   // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
     const filtered = searchRepos(reposRedux, searchTerm);
     return sortRepos(filtered, selectedSort);
   }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos]);
-
-  const availableOrgsList = useMemo(() => {
-    const orgs = repos.reduce((acc: string[], repo) => {
-      const orgName = repo.full_name.split("/")[0];
-      if (!acc.includes(orgName)) {
-        acc.push(orgName);
-      }
-      return acc;
-    }, []);
-    return orgs;
-  }, [repos]);
-
-  useEffect(() => {
-    dispatch(setInitialOrgs(availableOrgsList));
-  }, [reposRedux, availableOrgsList, dispatch]);
 
   if (error) {
     return (
@@ -123,104 +79,7 @@ function App() {
         </div>
 
         {/* <pre>{JSON.stringify(reposRedux[0], null, 2)}</pre> */}
-
-        {/*  Filtering Component*/}
-        {showFilters && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Filters
-            </h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <div>
-                <h3 className="text-lg font-medium text-gray-700 mb-2">
-                  Visibility
-                </h3>
-                <div className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    id="public"
-                    name="visibility"
-                    value="public"
-                    className="mr-2"
-                    checked={publicCheckbox}
-                    onChange={() => dispatch(togglePublic())}
-                  />
-                  <label htmlFor="public" className="text-gray-700">
-                    Public
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="private"
-                    name="visibility"
-                    value="private"
-                    className="mr-2"
-                    checked={privateCheckbox}
-                    onChange={() => dispatch(togglePrivate())}
-                  />
-                  <label htmlFor="private" className="text-gray-700">
-                    Private
-                  </label>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-700 mb-2">
-                  Status
-                </h3>
-                <div className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    id="active"
-                    name="status"
-                    className="mr-2"
-                    checked={activeCheckbox}
-                    onChange={() => dispatch(toggleActive())}
-                  />
-                  <label htmlFor="active" className="text-gray-700">
-                    Active
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="archive"
-                    name="status"
-                    className="mr-2"
-                    checked={archiveCheckbox}
-                    onChange={() => dispatch(toggleArchive())}
-                  />
-                  <label htmlFor="archive" className="text-gray-700">
-                    Archive
-                  </label>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-700 mb-2">
-                  Organization
-                </h3>
-                {availableOrgsList.map((org) => (
-                  <div key={org} className="flex items-center mb-2">
-                    <input
-                      type="checkbox"
-                      id={org}
-                      name="organization"
-                      className="mr-2"
-                      value={org}
-                      checked={selectedOrgs[org]}
-                      onChange={(e) => {
-                        dispatch(toggleOrg(e.target.value));
-                      }}
-                    />
-                    <label htmlFor={org} className="text-gray-700">
-                      {org}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+        { (reposRedux.length > 0) && <FilteringOptions/> }
 
         {loading ? (
           <div className="flex items-center justify-center h-64">
