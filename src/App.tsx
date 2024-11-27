@@ -71,10 +71,10 @@ function App() {
 
   // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
-    const searchedRepos = searchRepos(reposRedux, searchTerm);
-    const sorted = sortRepos(searchedRepos, selectedSort);
-    const filtered = filterRepos(sorted, filterState)
-    return filtered;
+    const filtered = filterRepos(reposRedux, filterState)
+    const sorted = sortRepos(filtered, selectedSort);
+    const searchedRepos = searchRepos(sorted, searchTerm);
+    return searchedRepos;
   }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos, filterRepos, filterState]);
 
   if (error) {
