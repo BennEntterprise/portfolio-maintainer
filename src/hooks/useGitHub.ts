@@ -37,12 +37,12 @@ export function useGitHub() {
             ...repo,
             pulls_count: pulls.data.length,
             readme: readme ? atob(readme.data.content) : '',
-            organization: repo.full_name.split('/')[0]
+            organization: repo.full_name.split('/')[0],
           };
         })
       );
 
-      setRepos(reposWithDetails as Repository[]);
+      setRepos(reposWithDetails as unknown as Repository[]);
       setError(null);
     } catch (err) {
       setError('Failed to fetch repositories');

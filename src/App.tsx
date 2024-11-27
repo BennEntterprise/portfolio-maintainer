@@ -9,6 +9,7 @@ import { useGitHub } from "./hooks/useGitHub";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
 import { RootState } from "./redux/store";
 import { Repository, SortOption } from "./types";
+import { FilterState } from "./redux/filteringSlice";
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -20,10 +21,11 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
+  const { repos, loading, error, fetchRepos } = useGitHub();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
+  const filterState = useSelector((state: RootState) => state.filtering);
   const reposRedux = useSelector((state: RootState) => state.repo.value);
-  const { repos, loading, error, fetchRepos } = useGitHub();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,21 +49,33 @@ function App() {
     });
   },[]);
 
-  const searchRepos = useCallback((repos: Repository[], searchTerm: string) => {
+  const searchRepos = useCallback((reposRedux: Repository[], searchTerm: string) => {
     const term = searchTerm.toLowerCase();
-    return repos.filter(repo => 
+    return reposRedux.filter(repo => 
       repo.name.toLowerCase().includes(term) ||
       (repo.description?.toLowerCase().includes(term)) ||
       (repo.readme?.toLowerCase().includes(term))
     );
   },[]);
 
+  const filterRepos = useCallback((repos: Repository[], filterState: FilterState) => {
+    return repos.filter(repo => {
+      if (!filterState.archiveCheckbox && repo.archived) return false;
+      if (!filterState.activeCheckbox && !repo.active) return false;
+      if (!filterState.publicCheckbox && repo.private) return false;
+      if (!filterState.privateCheckbox && !repo.private) return false;
+      if (!filterState.selectedOrgs[repo.organization || '']) return false;
+      return true;
+    })
+  },[])
+
   // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
     const searchedRepos = searchRepos(reposRedux, searchTerm);
     const sorted = sortRepos(searchedRepos, selectedSort);
-    return sorted;
-  }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos]);
+    const filtered = filterRepos(sorted, filterState)
+    return filtered;
+  }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos, filterRepos, filterState]);
 
   if (error) {
     return (

@@ -12,6 +12,8 @@ export interface Repository {
   private: boolean;
   size: number
   organization?: string;
+  archived: boolean;
+  active: boolean;
 }
 
 export interface SortOption {
