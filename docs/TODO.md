@@ -2,11 +2,12 @@
 
 ## High Priority Todos
 
-[] Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)s
+[] Containerize, release to Dockerhub and mark a release as V1.
 
 ## Medium Priority Todos
 
 [] Add husky pre-commit hooks (lint and build)
+[] Save filter state in local storage (ensure it can reconcile)
 
 ## Low Priority Todos
 
@@ -27,3 +28,4 @@
 [x] Feat: Add an icon for devcontainers
 [x] Feat: Redux so that there is only one call. Trigger the fetch repos call on button press.
 [x] 2024-11-26 T 20:50:13 Feat:Checkboxes to handle filtering. (archive/non-archive, organization)
+[x] 2024-11-27 Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)
