@@ -6,7 +6,6 @@
 
 ## Medium Priority Todos
 
-[] Feat: Left Sidebar Checkboxes to handle filtering. (archive/non-archive, organization)
 [] Add husky pre-commit hooks (lint and build)
 
 ## Low Priority Todos
@@ -27,3 +26,4 @@
 [x] Feat: Add an icon for Dockerfile
 [x] Feat: Add an icon for devcontainers
 [x] Feat: Redux so that there is only one call. Trigger the fetch repos call on button press.
+[x] 2024-11-26 T 20:50:13 Feat:Checkboxes to handle filtering. (archive/non-archive, organization)
