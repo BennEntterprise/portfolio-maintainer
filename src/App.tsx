@@ -57,17 +57,17 @@ function App() {
       (repo.readme?.toLowerCase().includes(term))
     );
   },[]);
-
   const filterRepos = useCallback((repos: Repository[], filterState: FilterState) => {
     return repos.filter(repo => {
-      if (!filterState.archiveCheckbox && repo.archived) return false;
-      if (!filterState.activeCheckbox && !repo.active) return false;
-      if (!filterState.publicCheckbox && repo.private) return false;
-      if (!filterState.privateCheckbox && !repo.private) return false;
-      if (!filterState.selectedOrgs[repo.organization || '']) return false;
-      return true;
-    })
-  },[])
+      const isArchived = !filterState.archiveCheckbox && repo.archived;
+      const isActive = !filterState.activeCheckbox && !repo.archived;
+      const isPublic = !filterState.publicCheckbox && repo.private;
+      const isPrivate = !filterState.privateCheckbox && !repo.private;
+      const isOrgSelected = !filterState.selectedOrgs[repo.organization || ''];
+
+      return !(isArchived || isActive || isPublic || isPrivate || isOrgSelected);
+    });
+  }, []);
 
   // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
