@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Octokit } from 'octokit';
-import { Repository, SortOption } from '../types';
+import { Repository } from '../types';
 
 const octokit = new Octokit({
   auth: import.meta.env.VITE_GITHUB_TOKEN
@@ -51,39 +51,11 @@ export function useGitHub() {
       setLoading(false);
     }
   };
-
-  const sortRepos = (repos: Repository[], option: SortOption) => {
-    return [...repos].sort((a, b) => {
-      const multiplier = option.direction === 'desc' ? -1 : 1;
-      
-      switch (option.value) {
-        case 'pulls':
-          return multiplier * ((a.pulls_count || 0) - (b.pulls_count || 0));
-        case 'updated':
-          return multiplier * (new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime());
-        case 'stars':
-          return multiplier * (a.stargazers_count - b.stargazers_count);
-        default:
-          return 0;
-      }
-    });
-  };
-
-  const searchRepos = (repos: Repository[], searchTerm: string) => {
-    const term = searchTerm.toLowerCase();
-    return repos.filter(repo => 
-      repo.name.toLowerCase().includes(term) ||
-      (repo.description?.toLowerCase().includes(term)) ||
-      (repo.readme?.toLowerCase().includes(term))
-    );
-  };
-
+  
   return {
     repos,
     loading,
     error,
-    sortRepos,
-    searchRepos,
     fetchRepos,
   };
 }

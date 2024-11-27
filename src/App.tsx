@@ -1,5 +1,5 @@
 import { Github, Loader } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { RepoCard } from "./components/RepoCard";
@@ -8,7 +8,7 @@ import { SortSelect } from "./components/SortSelect";
 import { useGitHub } from "./hooks/useGitHub";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
 import { RootState } from "./redux/store";
-import { SortOption } from "./types";
+import { Repository, SortOption } from "./types";
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -23,17 +23,44 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const reposRedux = useSelector((state: RootState) => state.repo.value);
-  const { repos, loading, error, fetchRepos, sortRepos, searchRepos } = useGitHub();
+  const { repos, loading, error, fetchRepos } = useGitHub();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
 
+  const sortRepos = useCallback((repos: Repository[], option: SortOption) => {
+    return [...repos].sort((a, b) => {
+      const multiplier = option.direction === 'desc' ? -1 : 1;
+      
+      switch (option.value) {
+        case 'pulls':
+          return multiplier * ((a.pulls_count || 0) - (b.pulls_count || 0));
+        case 'updated':
+          return multiplier * (new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime());
+        case 'stars':
+          return multiplier * (a.stargazers_count - b.stargazers_count);
+        default:
+          return 0;
+      }
+    });
+  },[]);
+
+  const searchRepos = useCallback((repos: Repository[], searchTerm: string) => {
+    const term = searchTerm.toLowerCase();
+    return repos.filter(repo => 
+      repo.name.toLowerCase().includes(term) ||
+      (repo.description?.toLowerCase().includes(term)) ||
+      (repo.readme?.toLowerCase().includes(term))
+    );
+  },[]);
+
   // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
-    const filtered = searchRepos(reposRedux, searchTerm);
-    return sortRepos(filtered, selectedSort);
+    const searchedRepos = searchRepos(reposRedux, searchTerm);
+    const sorted = sortRepos(searchedRepos, selectedSort);
+    return sorted;
   }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos]);
 
   if (error) {
