@@ -14,6 +14,7 @@ export interface Repository {
   organization?: string;
   archived: boolean;
   active: boolean;
+  hasTodo: boolean;
 }
 
 export interface SortOption {
