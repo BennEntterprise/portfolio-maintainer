@@ -43,14 +43,15 @@ export function RepoCard({ repo }: RepoCardProps) {
       {repo.description && (
         <p className="text-gray-600 mb-4">{repo.description}</p>
       )}
+        
+      <div className='flex flex-row'>
+        <span><BookOpenCheck /></span><span className='px-2'>{repo.readme ? '✅': '❌'}</span>
+      </div>
+      <div className="flex flex-row">
+          <span><ListTodo   /></span><span className='px-2'>{repo.hasTodo ? '✅': '❌'}</span>
+      </div>
 
       {showMeta && <div>
-        <div className="flex flex-row">
-          <span><ListTodo  /></span><span className='px-2'>Has Todo.md</span>
-        </div>
-        <div className='flex flex-row'>
-          <span><BookOpenCheck /></span><span className='px-2'>Has README.md</span>
-        </div>
         <div className='flex flex-row'>
           <span><Copyright /></span><span className='px-2'>Has License</span>
         </div>

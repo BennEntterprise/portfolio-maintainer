@@ -19,6 +19,7 @@
 
 ## Low Priority Todos
 
+[] Show some sort of intermediate counter while the repos are loading so the user can understand that stuff is, in fact, happening in the background.
 [] Refactor: The Dropdown that handles ordering should be converted to chips/radio buttons so that it is easier to see all options.
 [] Feat: Use AGGrid to show all of the above items as a grid list, not just as cards.
 
