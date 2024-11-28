@@ -11,6 +11,9 @@ export interface Repository {
   pulls_count?: number;
   private: boolean;
   size: number
+  organization?: string;
+  archived: boolean;
+  active: boolean;
 }
 
 export interface SortOption {

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
 import { Octokit } from 'octokit';
-import { Repository, SortOption } from '../types';
+import { useState } from 'react';
+import { Repository } from '../types';
 
 const octokit = new Octokit({
   auth: import.meta.env.VITE_GITHUB_TOKEN
@@ -8,15 +8,13 @@ const octokit = new Octokit({
 
 export function useGitHub() {
   const [repos, setRepos] = useState<Repository[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchRepos = async () => {
     try {
       setLoading(true);
-      const { data } = await octokit.rest.repos.listForAuthenticatedUser({
-        per_page: 1000,
-      });
+      const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser)
      
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
@@ -36,12 +34,23 @@ export function useGitHub() {
           return {
             ...repo,
             pulls_count: pulls.data.length,
-            readme: readme ? atob(readme.data.content) : ''
+            readme: readme ? atob(readme.data.content) : '',
+            organization: repo.full_name.split('/')[0],
+            //  TODO: 
+            // license: repo.license?.name || 'None',
+            // size: repo.size,
+            // todoFile: todoFile ? atob(todoFile.data.content) : '',
+            // private: repo.private,
+            // public: !repo.private,
+            // archived: repo.archived,
+            // active: !repo.archived
+            // containerized: repo.topics.includes('containerized'),
+            // Deployment.md: readme ? readme.data.content.includes('Deployment.md') : false,
           };
         })
       );
 
-      setRepos(reposWithDetails as Repository[]);
+      setRepos(reposWithDetails as unknown as Repository[]);
       setError(null);
     } catch (err) {
       setError('Failed to fetch repositories');
@@ -50,42 +59,11 @@ export function useGitHub() {
       setLoading(false);
     }
   };
-
-  const sortRepos = (repos: Repository[], option: SortOption) => {
-    return [...repos].sort((a, b) => {
-      const multiplier = option.direction === 'desc' ? -1 : 1;
-      
-      switch (option.value) {
-        case 'pulls':
-          return multiplier * ((a.pulls_count || 0) - (b.pulls_count || 0));
-        case 'updated':
-          return multiplier * (new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime());
-        case 'stars':
-          return multiplier * (a.stargazers_count - b.stargazers_count);
-        default:
-          return 0;
-      }
-    });
-  };
-
-  const searchRepos = (repos: Repository[], searchTerm: string) => {
-    const term = searchTerm.toLowerCase();
-    return repos.filter(repo => 
-      repo.name.toLowerCase().includes(term) ||
-      (repo.description?.toLowerCase().includes(term)) ||
-      (repo.readme?.toLowerCase().includes(term))
-    );
-  };
-
-  useEffect(() => {
-    fetchRepos();
-  }, []);
-
+  
   return {
     repos,
     loading,
     error,
-    sortRepos,
-    searchRepos
+    fetchRepos,
   };
 }

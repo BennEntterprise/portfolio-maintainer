@@ -1,42 +1,114 @@
-import { useState, useMemo } from 'react';
-import { Github, Loader } from 'lucide-react';
-import { RepoCard } from './components/RepoCard';
-import { SearchBar } from './components/SearchBar';
-import { SortSelect } from './components/SortSelect';
-import { useGitHub } from './hooks/useGitHub';
-import { SortOption } from './types';
-import { useDispatch, useSelector } from 'react-redux';
-import { setRepos as setReposInRedux } from './redux/repoSlice';
-import { RootState } from './redux/store';
+import { Github, Loader } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { FilteringOptions } from "./components/FilteringOptions";
+import { RepoCard } from "./components/RepoCard";
+import { SearchBar } from "./components/SearchBar";
+import { SortSelect } from "./components/SortSelect";
+import { useGitHub } from "./hooks/useGitHub";
+import { FilterState } from "./redux/filteringSlice";
+import { setRepos as setReposInRedux } from "./redux/repoSlice";
+import { RootState } from "./redux/store";
+import { Repository, SortOption } from "./types";
 
 const sortOptions: SortOption[] = [
-  { label: 'Least Recently Updated', value: 'updated', direction: 'asc' },
-  { label: 'Recently Updated', value: 'updated', direction: 'desc' },
-  { label: 'Least Pull Requests', value: 'pulls', direction: 'asc' },
-  { label: 'Most Pull Requests', value: 'pulls', direction: 'desc' },
-  { label: 'Least Stars', value: 'stars', direction: 'asc' },
-  { label: 'Most Stars', value: 'stars', direction: 'desc' },
+  { label: "Least Recently Updated", value: "updated", direction: "asc" },
+  { label: "Recently Updated", value: "updated", direction: "desc" },
+  { label: "Least Pull Requests", value: "pulls", direction: "asc" },
+  { label: "Most Pull Requests", value: "pulls", direction: "desc" },
+  { label: "Least Stars", value: "stars", direction: "asc" },
+  { label: "Most Stars", value: "stars", direction: "desc" },
 ];
 
 function App() {
-  const { repos, loading, error, sortRepos, searchRepos } = useGitHub();
-  const [searchTerm, setSearchTerm] = useState('');
+  const { repos, loading, error, fetchRepos } = useGitHub();
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
+  const filterState = useSelector((state: RootState) => state.filtering);
   const reposRedux = useSelector((state: RootState) => state.repo.value);
-  
-  // Take the Repos Returned from the Github Hook, and set them in Redux
   const dispatch = useDispatch();
-  dispatch(setReposInRedux(repos));
+
+  // We set the repos gathered from the GitHub API
+  // to the Redux store. We _could_ have done
+  // this in the useGitHub hook, but I want
+  // to keep hook logic separate
+  // from Redux logic which is
+  // why we're doing it here.
+  useEffect(() => {
+    dispatch(setReposInRedux(repos));
+  }, [dispatch, repos]);
+
+  const sortRepos = useCallback((repos: Repository[], option: SortOption) => {
+    return [...repos].sort((a, b) => {
+      const multiplier = option.direction === "desc" ? -1 : 1;
+
+      switch (option.value) {
+        case "pulls":
+          return multiplier * ((a.pulls_count || 0) - (b.pulls_count || 0));
+        case "updated":
+          return (
+            multiplier *
+            (new Date(a.updated_at).getTime() -
+              new Date(b.updated_at).getTime())
+          );
+        case "stars":
+          return multiplier * (a.stargazers_count - b.stargazers_count);
+        default:
+          return 0;
+      }
+    });
+  }, []);
+
+  const searchRepos = useCallback(
+    (reposRedux: Repository[], searchTerm: string) => {
+      const term = searchTerm.toLowerCase();
+      return reposRedux.filter(
+        (repo) =>
+          repo.name.toLowerCase().includes(term) ||
+          repo.description?.toLowerCase().includes(term) ||
+          repo.readme?.toLowerCase().includes(term)
+      );
+    },
+    []
+  );
+
+  const filterRepos = useCallback(
+    (repos: Repository[], filterState: FilterState) => {
+      return repos.filter((repo) => {
+        const isArchived = !filterState.archiveCheckbox && repo.archived;
+        const isActive = !filterState.activeCheckbox && !repo.archived;
+        const isPublic = !filterState.publicCheckbox && repo.private;
+        const isPrivate = !filterState.privateCheckbox && !repo.private;
+        const isOrgSelected =
+          !filterState.selectedOrgs[repo.organization || ""];
+
+        return !(
+          isArchived ||
+          isActive ||
+          isPublic ||
+          isPrivate ||
+          isOrgSelected
+        );
+      });
+    },
+    []
+  );
 
   // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
-    const filtered = searchRepos(reposRedux, searchTerm);
-    return sortRepos(filtered, selectedSort);
-  }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos]);
-
-  // Maintain som Stats for the UI
-  const privateRepos = useMemo(() => reposRedux.filter(repo => repo.private), [reposRedux]);
-  const publicRepos = useMemo(() => reposRedux.filter(repo => !repo.private),[reposRedux]);
+    const filtered = filterRepos(reposRedux, filterState);
+    const sorted = sortRepos(filtered, selectedSort);
+    const searchedRepos = searchRepos(sorted, searchTerm);
+    return searchedRepos;
+  }, [
+    reposRedux,
+    searchTerm,
+    selectedSort,
+    searchRepos,
+    sortRepos,
+    filterRepos,
+    filterState,
+  ]);
 
   if (error) {
     return (
@@ -53,23 +125,23 @@ function App() {
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between w-full">
             <Github className="w-8 h-8 mr-3" />
-            <h1 className="text-3xl font-bold text-gray-900">GitHub Explorer</h1>
-            <div className="ml-5" >
-              <p>Total Repos: {reposRedux.length}</p>
-              <p>Private Repos: {privateRepos.length}</p>
-              <p>Public Repos: {publicRepos.length}</p>
-            </div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              GitHub Explorer
+            </h1>
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
+              onClick={fetchRepos}
+            >
+              Fetch Repos
+            </button>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
           <div className="flex-1">
-            <SearchBar 
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
-            />
+            <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           </div>
           <div>
             <SortSelect
@@ -80,9 +152,15 @@ function App() {
           </div>
         </div>
 
-        {/* <div>
-          <pre>{JSON.stringify(repos[0], null, 2)}</pre>
-        </div> */}
+        {/* <pre>{JSON.stringify(reposRedux[0], null, 2)}</pre> */}
+        {reposRedux.length > 0 && <FilteringOptions />}
+
+        {reposRedux.length > 0 && (
+          <div className="flex flex w-full justify-around">
+            <p>Total Visible Repos: {filteredAndSortedRepos.length}</p>
+            <p>Total Repos: {reposRedux.length}</p>
+          </div>
+        )}
 
         {loading ? (
           <div className="flex items-center justify-center h-64">

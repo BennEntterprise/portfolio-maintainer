@@ -2,13 +2,20 @@
 
 ## High Priority Todos
 
-[] Feat: Redux so that there is only one call. Trigger the fetch repos call on button press.
-[] Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)s
+[] feat: show icon for README
+[] feat: show icon for License
+[] feat: show icon for Size
+[] feat: show icon for TODO.md
+[] feat: show icon for Public/Private
+[] feat: show icon for Active/Archive
+[] feat: show icon for Dockerfile
+[] Devops: Containerize, release to Dockerhub and mark a release as V1.
 
 ## Medium Priority Todos
 
-[] Feat: Left Sidebar Checkboxes to handle filtering. (archive/non-archive, organization)
-[] Add husky pre-commit hooks (lint and build)
+[] Devops: Add husky pre-commit hooks (lint and build)
+[] Feat: Save filter state in local storage (ensure it can reconcile)
+[] Perf: [typed hooks for dispatch and redux state](https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks)
 
 ## Low Priority Todos
 
@@ -27,3 +34,6 @@
 [x] 2024-11-10 T 20:23:15 Feat: Add icon to the card for private vs not private, (might need the designation "private" or   "visibility": "private")
 [x] Feat: Add an icon for Dockerfile
 [x] Feat: Add an icon for devcontainers
+[x] Feat: Redux so that there is only one call. Trigger the fetch repos call on button press.
+[x] 2024-11-26 T 20:50:13 Feat:Checkboxes to handle filtering. (archive/non-archive, organization)
+[x] 2024-11-27 Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)
