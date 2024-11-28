@@ -41,10 +41,9 @@ export const FilteringOptions = () => {
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">Filters</h2>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <h3 className="text-lg font-medium text-gray-700 mb-2">Visibility</h3>
+          <h3 className="font-medium text-gray-700 mb-2">Visibility</h3>
           <div className="flex items-center mb-2">
             <input
               type="checkbox"
@@ -75,7 +74,7 @@ export const FilteringOptions = () => {
           </div>
         </div>
         <div>
-          <h3 className="text-lg font-medium text-gray-700 mb-2">Status</h3>
+          <h3 className="font-medium text-gray-700 mb-2">Status</h3>
           <div className="flex items-center mb-2">
             <input
               type="checkbox"
@@ -104,7 +103,7 @@ export const FilteringOptions = () => {
           </div>
         </div>
         <div>
-          <h3 className="text-lg font-medium text-gray-700 mb-2">
+          <h3 className="font-medium text-gray-700 mb-2">
             Organization
           </h3>
           {availableOrgsList.map((org) => (
