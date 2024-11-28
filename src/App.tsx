@@ -10,6 +10,7 @@ import { FilterState } from "./redux/filteringSlice";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
 import { RootState } from "./redux/store";
 import { Repository, SortOption } from "./types";
+import 'react-tooltip/dist/react-tooltip.css'
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
