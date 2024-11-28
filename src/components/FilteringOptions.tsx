@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
-  selectArchiveCheckbox,
   setInitialOrgs,
   toggleActive,
   toggleArchive,
@@ -116,7 +115,9 @@ export const FilteringOptions = () => {
                 name="organization"
                 className="mr-2"
                 value={org}
-                checked={selectedOrgs[org]}
+                // 👇 Bang Bang is needed to prevent undefined from throwing 
+                // a warning in React: uncontrolled to controlled component.
+                checked={!!selectedOrgs[org]}
                 onChange={(e) => {
                   dispatch(toggleOrg(e.target.value));
                 }}
