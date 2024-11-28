@@ -2,17 +2,15 @@
 
 ## High Priority Todos
 
-[] feat: show icon for README
-[] feat: show icon for License
-[] feat: show icon for Size
-[] feat: show icon for TODO.md
+[] Fix: Filtering isn't working
 [] feat: show icon for Public/Private
 [] feat: show icon for Active/Archive
-[] feat: show icon for Dockerfile
 [] Devops: Containerize, release to Dockerhub and mark a release as V1.
+[] feat: pagination
 
 ## Medium Priority Todos
-
+[] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds)
+[] Perf: Reduce calls to check for files (do it on one call to the repo instead of 3)
 [] Devops: Add husky pre-commit hooks (lint and build)
 [] Feat: Save filter state in local storage (ensure it can reconcile)
 [] Perf: [typed hooks for dispatch and redux state](https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks)
@@ -38,3 +36,8 @@
 [x] Feat: Redux so that there is only one call. Trigger the fetch repos call on button press.
 [x] 2024-11-26 T 20:50:13 Feat:Checkboxes to handle filtering. (archive/non-archive, organization)
 [x] 2024-11-27 Feat: Ensure pagination works and I can get all repos. (right now tops out at 100.)
+[x] 2024-11-28 T 11:51:08 feat: show icon for README
+[x] 2024-11-28 T 11:51:08 feat: show icon for License
+[x] 2024-11-28 T 11:51:08 feat: show icon for Size
+[x] 2024-11-28 T 11:51:08 feat: show icon for TODO.md
+[x] 2024-11-28 T 11:51:08 feat: show icon for Dockerfile

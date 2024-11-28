@@ -33,9 +33,7 @@ export function useGitHub() {
 
       // Check for The File
       // const fileExists = filePaths.has(fileToCheck.toLowerCase()); // 👈 This only checks for exact (case insensitive match)
-      const fileExistsAsSubstring = Array.from(filePaths).some(filePath => 
-        filePath?.toLowerCase().includes(fileToCheck.toLowerCase())
-      );
+      const fileExistsAsSubstring = Array.from(filePaths).some(filePath => filePath?.toLowerCase().includes(fileToCheck.toLowerCase()))
       return fileExistsAsSubstring 
     } catch (error) {
       console.error('Error fetching repository tree:', error);
@@ -47,7 +45,7 @@ export function useGitHub() {
       setLoading(true);
       // HACK: Useful fo debugging with a smaller set of repos
       // const {data} = await  octokit.rest.repos.listForAuthenticatedUser({
-      //   per_page: 100
+      //   per_page: 5
       // })
       const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser)
       
@@ -56,7 +54,7 @@ export function useGitHub() {
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
         data.map(async (repo) => {
-          const [pulls, readme, hasTodomd] = await Promise.all([
+          const [pulls, readme, hasTodo, hasDockerfile, hasDevcontainer] = await Promise.all([
             octokit.rest.pulls.list({
               owner: repo.owner.login,
               repo: repo.name,
@@ -66,26 +64,35 @@ export function useGitHub() {
               owner: repo.owner.login,
               repo: repo.name
             }).catch(() => null),
-            checkForFilesInTree(repo.owner.login, repo.name, 'todo.md')
+            checkForFilesInTree(repo.owner.login, repo.name, 'todo.md'),
+            checkForFilesInTree(repo.owner.login, repo.name, 'Dockerfile'),
+            checkForFilesInTree(repo.owner.login, repo.name, '.devcontainer')
           ]);
 
           return {
-            ...repo,
+            // Basic Stuff 
+            id: repo.id,
+            name: repo.name,
+            updated_at: repo.updated_at,
+            description: repo.description || '',
+            html_url: repo.html_url,
+            full_name: repo.full_name,
             pulls_count: pulls.data.length,
             readme: readme ? atob(readme.data.content) : '',
             organization: repo.full_name.split('/')[0],
-            hasTodomd,
-            //  TODO: 
-            // license: repo.license?.name || 'None',
-            // size: repo.size,
-            // todoFile: todoFile ? atob(todoFile.data.content) : '',
-            // private: repo.private,
-            // public: !repo.private,
-            // archived: repo.archived,
-            // active: !repo.archived
-            // containerized: repo.topics.includes('containerized'),
-            // Deployment.md: readme ? readme.data.content.includes('Deployment.md') : false,
-          };
+            open_issues_count: repo.open_issues_count,
+            stargazers_count: repo.stargazers_count, 
+
+            // Card Stuff
+            private: repo.private, 
+            size: repo.size,
+            archived: repo.archived,
+            active: !repo.archived,
+            license: repo.license?.name || 'None',
+            hasTodo: !!hasTodo,
+            hasDockerfile: !!hasDockerfile,
+            hasDevcontainer: !!hasDevcontainer
+          } satisfies Repository;
         })
       );
 
