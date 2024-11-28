@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from './counterSlice'
 import repoReducer from './repoSlice'
 import filteringSlice  from './filteringSlice'
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     repo: repoReducer,
     filtering: filteringSlice
   },
