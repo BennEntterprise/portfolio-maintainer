@@ -41,7 +41,7 @@ export const FilteringOptions = () => {
 
   return (
     <div className="mb-8">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <div>
           <h3 className="font-medium text-gray-700 mb-2">Visibility</h3>
           <div className="flex items-center mb-2">

@@ -195,14 +195,13 @@ function App() {
               onEntriesPerPageChange={setEntriesPerPage}
               onPageChange={setCurrentPage}
             />
-            <div className="flex flex w-full justify-around">
-              <p>Total Visible Repos: {filteredAndSortedRepos.length}</p>
-              <p>Total Repos: {reposRedux.length}</p>
-            </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {paginatedRepos.map((repo) => (
                 <RepoCard key={repo.id} repo={repo} />
               ))}
+            </div>
+            <div className="flex flex w-full justify-around">
+              <p>Search Results: {filteredAndSortedRepos.length} Repos</p>
             </div>
             <Pager
               totalEntries={filteredAndSortedRepos.length}
