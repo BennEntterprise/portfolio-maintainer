@@ -1,33 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
+  selectArchiveCheckbox,
   setInitialOrgs,
   toggleActive,
   toggleArchive,
   toggleOrg,
   togglePrivate,
   togglePublic,
+  useActiveCheckbox,
+  useArchiveCheckbox,
+  usePrivateCheckbox,
+  usePublicCheckbox,
+  useSelectedOrgs,
 } from "../redux/filteringSlice";
 import { useEffect, useMemo } from "react";
 
 export const FilteringOptions = () => {
   const dispatch = useDispatch();
   const reposRedux = useSelector((state: RootState) => state.repo.value);
-  const archiveCheckbox = useSelector(
-    (state: RootState) => state.filtering.archiveCheckbox
-  );
-  const activeCheckbox = useSelector(
-    (state: RootState) => state.filtering.activeCheckbox
-  );
-  const publicCheckbox = useSelector(
-    (state: RootState) => state.filtering.publicCheckbox
-  );
-  const privateCheckbox = useSelector(
-    (state: RootState) => state.filtering.privateCheckbox
-  );
-  const selectedOrgs = useSelector(
-    (state: RootState) => state.filtering.selectedOrgs
-  );
+  const archiveCheckbox = useArchiveCheckbox()
+  const activeCheckbox = useActiveCheckbox()
+  const publicCheckbox = usePublicCheckbox()
+  const privateCheckbox = usePrivateCheckbox()
+  const selectedOrgs = useSelectedOrgs()
 
   const availableOrgsList = useMemo(() => {
     const orgs = reposRedux.reduce((acc: string[], repo) => {

@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { Octokit } from 'octokit';
+import { useState } from 'react';
 import { Repository } from '../types';
 
 const octokit = new Octokit({
@@ -14,7 +14,7 @@ export function useGitHub() {
   const fetchRepos = async () => {
     try {
       setLoading(true);
-      const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser, {})
+      const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser)
      
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
@@ -36,6 +36,16 @@ export function useGitHub() {
             pulls_count: pulls.data.length,
             readme: readme ? atob(readme.data.content) : '',
             organization: repo.full_name.split('/')[0],
+            //  TODO: 
+            // license: repo.license?.name || 'None',
+            // size: repo.size,
+            // todoFile: todoFile ? atob(todoFile.data.content) : '',
+            // private: repo.private,
+            // public: !repo.private,
+            // archived: repo.archived,
+            // active: !repo.archived
+            // containerized: repo.topics.includes('containerized'),
+            // Deployment.md: readme ? readme.data.content.includes('Deployment.md') : false,
           };
         })
       );

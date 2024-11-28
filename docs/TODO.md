@@ -2,12 +2,20 @@
 
 ## High Priority Todos
 
-[] Containerize, release to Dockerhub and mark a release as V1.
+[] feat: show icon for README
+[] feat: show icon for License
+[] feat: show icon for Size
+[] feat: show icon for TODO.md
+[] feat: show icon for Public/Private
+[] feat: show icon for Active/Archive
+[] feat: show icon for Dockerfile
+[] Devops: Containerize, release to Dockerhub and mark a release as V1.
 
 ## Medium Priority Todos
 
-[] Add husky pre-commit hooks (lint and build)
-[] Save filter state in local storage (ensure it can reconcile)
+[] Devops: Add husky pre-commit hooks (lint and build)
+[] Feat: Save filter state in local storage (ensure it can reconcile)
+[] Perf: [typed hooks for dispatch and redux state](https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks)
 
 ## Low Priority Todos
 

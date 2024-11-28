@@ -6,10 +6,10 @@ import { RepoCard } from "./components/RepoCard";
 import { SearchBar } from "./components/SearchBar";
 import { SortSelect } from "./components/SortSelect";
 import { useGitHub } from "./hooks/useGitHub";
+import { FilterState } from "./redux/filteringSlice";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
 import { RootState } from "./redux/store";
 import { Repository, SortOption } from "./types";
-import { FilterState } from "./redux/filteringSlice";
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -28,54 +28,87 @@ function App() {
   const reposRedux = useSelector((state: RootState) => state.repo.value);
   const dispatch = useDispatch();
 
+  // We set the repos gathered from the GitHub API
+  // to the Redux store. We _could_ have done
+  // this in the useGitHub hook, but I want
+  // to keep hook logic separate
+  // from Redux logic which is
+  // why we're doing it here.
   useEffect(() => {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
 
   const sortRepos = useCallback((repos: Repository[], option: SortOption) => {
     return [...repos].sort((a, b) => {
-      const multiplier = option.direction === 'desc' ? -1 : 1;
-      
+      const multiplier = option.direction === "desc" ? -1 : 1;
+
       switch (option.value) {
-        case 'pulls':
+        case "pulls":
           return multiplier * ((a.pulls_count || 0) - (b.pulls_count || 0));
-        case 'updated':
-          return multiplier * (new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime());
-        case 'stars':
+        case "updated":
+          return (
+            multiplier *
+            (new Date(a.updated_at).getTime() -
+              new Date(b.updated_at).getTime())
+          );
+        case "stars":
           return multiplier * (a.stargazers_count - b.stargazers_count);
         default:
           return 0;
       }
     });
-  },[]);
-
-  const searchRepos = useCallback((reposRedux: Repository[], searchTerm: string) => {
-    const term = searchTerm.toLowerCase();
-    return reposRedux.filter(repo => 
-      repo.name.toLowerCase().includes(term) ||
-      (repo.description?.toLowerCase().includes(term)) ||
-      (repo.readme?.toLowerCase().includes(term))
-    );
-  },[]);
-  const filterRepos = useCallback((repos: Repository[], filterState: FilterState) => {
-    return repos.filter(repo => {
-      const isArchived = !filterState.archiveCheckbox && repo.archived;
-      const isActive = !filterState.activeCheckbox && !repo.archived;
-      const isPublic = !filterState.publicCheckbox && repo.private;
-      const isPrivate = !filterState.privateCheckbox && !repo.private;
-      const isOrgSelected = !filterState.selectedOrgs[repo.organization || ''];
-
-      return !(isArchived || isActive || isPublic || isPrivate || isOrgSelected);
-    });
   }, []);
+
+  const searchRepos = useCallback(
+    (reposRedux: Repository[], searchTerm: string) => {
+      const term = searchTerm.toLowerCase();
+      return reposRedux.filter(
+        (repo) =>
+          repo.name.toLowerCase().includes(term) ||
+          repo.description?.toLowerCase().includes(term) ||
+          repo.readme?.toLowerCase().includes(term)
+      );
+    },
+    []
+  );
+
+  const filterRepos = useCallback(
+    (repos: Repository[], filterState: FilterState) => {
+      return repos.filter((repo) => {
+        const isArchived = !filterState.archiveCheckbox && repo.archived;
+        const isActive = !filterState.activeCheckbox && !repo.archived;
+        const isPublic = !filterState.publicCheckbox && repo.private;
+        const isPrivate = !filterState.privateCheckbox && !repo.private;
+        const isOrgSelected =
+          !filterState.selectedOrgs[repo.organization || ""];
+
+        return !(
+          isArchived ||
+          isActive ||
+          isPublic ||
+          isPrivate ||
+          isOrgSelected
+        );
+      });
+    },
+    []
+  );
 
   // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
-    const filtered = filterRepos(reposRedux, filterState)
+    const filtered = filterRepos(reposRedux, filterState);
     const sorted = sortRepos(filtered, selectedSort);
     const searchedRepos = searchRepos(sorted, searchTerm);
     return searchedRepos;
-  }, [reposRedux, searchTerm, selectedSort, searchRepos, sortRepos, filterRepos, filterState]);
+  }, [
+    reposRedux,
+    searchTerm,
+    selectedSort,
+    searchRepos,
+    sortRepos,
+    filterRepos,
+    filterState,
+  ]);
 
   if (error) {
     return (
@@ -120,21 +153,22 @@ function App() {
         </div>
 
         {/* <pre>{JSON.stringify(reposRedux[0], null, 2)}</pre> */}
-        { (reposRedux.length > 0) && <FilteringOptions/> }
+        {reposRedux.length > 0 && <FilteringOptions />}
 
-        {(reposRedux.length > 0) && <>
-        Total Repos: {reposRedux.length}
-        <br></br>
-        Total Visible Repos: {filteredAndSortedRepos.length}
-        </>}
-        
+        {reposRedux.length > 0 && (
+          <div className="flex flex w-full justify-around">
+            <p>Total Visible Repos: {filteredAndSortedRepos.length}</p>
+            <p>Total Repos: {reposRedux.length}</p>
+          </div>
+        )}
+
         {loading ? (
           <div className="flex items-center justify-center h-64">
             <Loader className="w-8 h-8 animate-spin text-blue-500" />
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredAndSortedRepos.map((repo) => (
+            {filteredAndSortedRepos.map(repo => (
               <RepoCard key={repo.id} repo={repo} />
             ))}
           </div>

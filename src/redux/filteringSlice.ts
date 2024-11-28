@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from './store'; // Adjust the import according to your store file location
+import { useSelector } from 'react-redux';
 
 export interface FilterState {
     archiveCheckbox: boolean;
@@ -44,6 +46,12 @@ export const filterSlice = createSlice({
         }
     },
 })
+
+export const useArchiveCheckbox = () => useSelector((state: RootState) => state.filtering.archiveCheckbox);
+export const useActiveCheckbox = () => useSelector((state: RootState) => state.filtering.activeCheckbox);
+export const usePublicCheckbox = () => useSelector((state: RootState) => state.filtering.publicCheckbox);
+export const usePrivateCheckbox = () => useSelector((state: RootState) => state.filtering.privateCheckbox);
+export const useSelectedOrgs = () => useSelector((state: RootState) => state.filtering.selectedOrgs);
 
 export const {
     toggleArchive,
