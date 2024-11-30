@@ -83,8 +83,8 @@ function App() {
       return repos.filter((repo) => {
         const isArchived = !filterState.archiveCheckbox && repo.archived;
         const isActive = !filterState.activeCheckbox && !repo.archived;
-        const isPublic = !filterState.publicCheckbox && repo.private;
-        const isPrivate = !filterState.privateCheckbox && !repo.private;
+        const isPublic = !filterState.publicCheckbox && !repo.private;
+        const isPrivate = !filterState.privateCheckbox && repo.private;
         const isOrgSelected =
           !filterState.selectedOrgs[repo.organization || ""];
 
