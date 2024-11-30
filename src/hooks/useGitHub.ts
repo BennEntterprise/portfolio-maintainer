@@ -84,7 +84,7 @@ export function useGitHub() {
             stargazers_count: repo.stargazers_count, 
 
             // Card Stuff
-            private: repo.private, 
+            private: !!repo.private, 
             size: repo.size,
             archived: repo.archived,
             active: !repo.archived,
