@@ -6,7 +6,7 @@
 
 ## Medium Priority Todos
 
-[] feat: A settings tab where you can make different adjustments
+[] feat: MVP A settings tab where you can make different adjustments
 [] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds)
 [] Perf: Reduce calls to check for files (do it on one call to the repo instead of 3)
 [] Devops: Add husky pre-commit hooks (lint and build)

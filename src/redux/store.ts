@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import repoReducer from './repoSlice'
 import filteringSlice  from './filteringSlice'
+import repoReducer from './repoSlice'
+import settingsSlice from './settingsSlice'
 
 export const store = configureStore({
   reducer: {
     repo: repoReducer,
-    filtering: filteringSlice
+    filtering: filteringSlice,
+    settings: settingsSlice
   },
 })
 

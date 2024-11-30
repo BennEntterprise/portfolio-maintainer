@@ -1,7 +1,7 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { FilterState } from "./redux/filteringSlice";
-import { Github, Loader } from "lucide-react";
+import { Github, Loader, Settings as SettingsCog  } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { Repository, SortOption } from "./types";
 import { RootState } from "./redux/store";
@@ -11,7 +11,10 @@ import { SortSelect } from "./components/SortSelect";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGitHub } from "./hooks/useGitHub";
+import { toggleSettings } from "./redux/settingsSlice";
+
 import Pager from "./components/Pager";
+import SettingsModal from "./components/SettingsModal";
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -28,6 +31,7 @@ function App() {
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const settingModalOpen = useSelector((state: RootState) => state.settings.settingModalOpen);
 
   const reposRedux = useSelector((state: RootState) => state.repo.value);
   const filterState = useSelector((state: RootState) => state.filtering);
@@ -137,6 +141,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <SettingsCog onClick={() => dispatch(toggleSettings())}/>
+      {settingModalOpen && <SettingsModal />}
       <div className="max-w-7xl mx-auto">
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center justify-between w-full">
