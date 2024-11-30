@@ -2,18 +2,17 @@
 
 ## High Priority Todos
 
-[] Fix: Filtering isn't working
-[] feat: show icon for Public/Private
-[] feat: show icon for Active/Archive
 [] Devops: Containerize, release to Dockerhub and mark a release as V1.
-[] feat: pagination
 
 ## Medium Priority Todos
+
+[] feat: A settings tab where you can make different adjustments
 [] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds)
 [] Perf: Reduce calls to check for files (do it on one call to the repo instead of 3)
 [] Devops: Add husky pre-commit hooks (lint and build)
 [] Feat: Save filter state in local storage (ensure it can reconcile)
 [] Perf: [typed hooks for dispatch and redux state](https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks)
+[] feat: light/dark mode in settings.
 
 ## Low Priority Todos
 
@@ -41,3 +40,6 @@
 [x] 2024-11-28 T 11:51:08 feat: show icon for Size
 [x] 2024-11-28 T 11:51:08 feat: show icon for TODO.md
 [x] 2024-11-28 T 11:51:08 feat: show icon for Dockerfile
+[x] 2024-11-29 T 19:14:57 feat: show icon for Public/Private
+[x] 2024-11-29 T 19:24:42 feat: show icon for Active/Archive
+[x] 2024-11-29 T 19:25:56 feat: pagination
