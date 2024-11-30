@@ -203,13 +203,13 @@ function App() {
             <div className="flex flex w-full justify-around">
               <p>Search Results: {filteredAndSortedRepos.length} Repos</p>
             </div>
-            <Pager
+            {filteredAndSortedRepos.length > 0 && <Pager
               totalEntries={filteredAndSortedRepos.length}
               entriesPerPage={entriesPerPage}
               currentPage={currentPage}
               onEntriesPerPageChange={setEntriesPerPage}
               onPageChange={setCurrentPage}
-            />
+            />}
           </>
         )}
       </div>
