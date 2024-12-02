@@ -11,6 +11,7 @@ import {
   EyeIcon,
   EyeOff,
   Archive,
+  CircleDot,
 } from 'lucide-react';
 import { Repository } from '../types';
 import { formatDistanceToNow } from 'date-fns';
@@ -83,6 +84,10 @@ export function RepoCard({ repo }: RepoCardProps) {
           <span className="flex items-center">
             <Star className="w-4 h-4 mr-1" />
             {repo.stargazers_count}
+          </span>
+          <span className="flex items-center">
+            <CircleDot className="w-4 h-4 mr-1" />
+            {repo.open_issues_count}
           </span>
           {repo.private ? <span>{privateRepoIcon}</span> : <span>{publicRepoIcon}</span>}
         </div>

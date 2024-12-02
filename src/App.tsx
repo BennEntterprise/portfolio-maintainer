@@ -23,6 +23,8 @@ const sortOptions: SortOption[] = [
   { label: "Most Pull Requests", value: "pulls", direction: "desc" },
   { label: "Least Stars", value: "stars", direction: "asc" },
   { label: "Most Stars", value: "stars", direction: "desc" },
+  { label: "Most Issues", value: "issues", direction: "desc"},
+  { label: "Least Issues", value: "issues", direction: "asc"}
 ];
 
 function App() {
@@ -63,6 +65,8 @@ function App() {
           );
         case "stars":
           return multiplier * (a.stargazers_count - b.stargazers_count);
+        case 'issues':
+          return multiplier * (a.open_issues_count -b.open_issues_count)
         default:
           return 0;
       }
@@ -119,6 +123,51 @@ function App() {
     filterRepos,
     filterState,
   ]);
+
+
+  const [satisfactory, unsatisfactory] = useMemo(() => {
+    let totalCheckboxes = 0;
+    let totalXs = 0;
+    filteredAndSortedRepos.forEach((repo) => {
+      // Count up the checkmarks and x's
+
+      if (repo.hasDevcontainer) {
+        totalCheckboxes += 1;
+      } else {
+        totalXs += 1;
+      }
+      if(repo.readme){
+        totalCheckboxes += 1;
+      } else {
+        totalXs += 1;
+      }
+
+      if(repo.hasDockerfile){
+        totalCheckboxes += 1;
+      } else {
+        totalXs += 1;
+      }
+      
+      if(repo.hasDockerfile){
+        totalCheckboxes+=1
+      } else {
+        totalXs+=1;
+      }
+
+      if (repo.hasTodo){
+        totalCheckboxes+=1;
+      } else {
+        totalXs +=1;
+      }
+
+      if(repo.license){
+        totalCheckboxes+=1;
+      } else {
+        totalXs +=1
+      }
+    });
+    return [totalCheckboxes, totalXs];
+  }, [filteredAndSortedRepos]);
 
   const paginatedRepos = useMemo(() => {
     const startIndex = (currentPage - 1) * entriesPerPage;
@@ -201,6 +250,11 @@ function App() {
               onEntriesPerPageChange={setEntriesPerPage}
               onPageChange={setCurrentPage}
             />
+            <div className="w-full flex justify-center">
+              <span>Survey Results</span> 
+              <span>{satisfactory}✅</span>
+              <span>{unsatisfactory}❌</span>
+            </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {paginatedRepos.map((repo) => (
                 <RepoCard key={repo.id} repo={repo} />
