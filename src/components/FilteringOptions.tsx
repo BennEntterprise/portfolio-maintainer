@@ -71,7 +71,11 @@ export const FilteringOptions = () => {
 
 
   return (
-    <div className="mb-8">
+    <div 
+      id="filtering-options"
+      className="my-4 mx-1 border-2 rounded-md border-black-100 p-8 bg-slate-200"
+      
+      >
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
           <h3 className="font-medium text-gray-700 mb-2">Visibility</h3>
@@ -157,7 +161,10 @@ export const FilteringOptions = () => {
           ))}
         </div>
       </div>
-      <div id="filter-save-buttons">
+      <div 
+        id="filter-save-buttons"
+        className="w-full flex justify-center mt-4"
+      >
         <button
           className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
           type="button"

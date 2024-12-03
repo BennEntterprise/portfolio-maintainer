@@ -218,7 +218,6 @@ function App() {
 
         {reposRedux.length > 0 && (
           <section id="sort-search-filter-options" className="flex flex-col">
-            <h2>Sort, Search & Filter Options</h2>
             <div
               id="search-and-filter-controls"
               className="flex flex-col sm:flex-row gap-4 mb-8"
@@ -250,10 +249,10 @@ function App() {
               onEntriesPerPageChange={setEntriesPerPage}
               onPageChange={setCurrentPage}
             />
-            <div className="w-full flex justify-center">
-              <span>Survey Results</span> 
-              <span>{satisfactory}✅</span>
-              <span>{unsatisfactory}❌</span>
+            <div className="w-full flex justify-center m-4">
+              <span>Survey Results: </span> 
+              <span>{satisfactory} ✅</span>
+              <span>{unsatisfactory} ❌</span>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {paginatedRepos.map((repo) => (

@@ -31,7 +31,7 @@ const Pager: React.FC<PagerProps> = ({
         >
           <ArrowLeft />
         </button>
-        <div className='flex flex-col justify-center items-center'>
+        <div className='flex flex-col justify-center items-center bg-slate-100 my-4 p-4'>
           <span>
             Page {currentPage} of {totalPages}
           </span>
