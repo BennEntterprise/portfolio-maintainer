@@ -24,7 +24,9 @@ const sortOptions: SortOption[] = [
   { label: "Least Stars", value: "stars", direction: "asc" },
   { label: "Most Stars", value: "stars", direction: "desc" },
   { label: "Most Issues", value: "issues", direction: "desc"},
-  { label: "Least Issues", value: "issues", direction: "asc"}
+  { label: "Least Issues", value: "issues", direction: "asc"},
+  { label: "Abc", value: "alphabetical", direction: "asc"},
+  { label: "Zyx", value: "alphabetical", direction: "desc"},
 ];
 
 function App() {
@@ -55,6 +57,8 @@ function App() {
       const multiplier = option.direction === "desc" ? -1 : 1;
 
       switch (option.value) {
+        case 'alphabetical':
+          return multiplier * a.name.localeCompare(b.name)
         case "pulls":
           return multiplier * ((a.pulls_count || 0) - (b.pulls_count || 0));
         case "updated":

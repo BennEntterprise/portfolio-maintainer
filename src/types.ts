@@ -22,6 +22,6 @@ export interface Repository {
 
 export interface SortOption {
   label: string;
-  value: 'pulls' | 'updated' | 'stars' | 'issues';
+  value: 'alphabetical' | 'pulls' | 'updated' | 'stars' | 'issues';
   direction: 'asc' | 'desc';
 }
