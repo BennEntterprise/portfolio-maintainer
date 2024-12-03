@@ -134,9 +134,7 @@ export const FilteringOptions = () => {
           </div>
         </div>
         <div>
-          <h3 className="font-medium text-gray-700 mb-2">
-            Organization
-          </h3>
+          <h3 className="font-medium text-gray-700 mb-2">Organization</h3>
           {availableOrgsList.map((org) => (
             <div key={org} className="flex items-center mb-2">
               <input
@@ -145,7 +143,7 @@ export const FilteringOptions = () => {
                 name="organization"
                 className="mr-2"
                 value={org}
-                // 👇 Bang Bang is needed to prevent undefined from throwing 
+                // 👇 Bang Bang is needed to prevent undefined from throwing
                 // a warning in React: uncontrolled to controlled component.
                 checked={!!selectedOrgs[org]}
                 onChange={(e) => {
@@ -160,9 +158,27 @@ export const FilteringOptions = () => {
         </div>
       </div>
       <div id="filter-save-buttons">
-        <button onClick={saveFilterStatusToLocalStorage}>Save</button>
-        <button onClick={loadFilterStatusFromLocalStorage}>Load</button>
-        <button onClick={resetLocalStorageFilters}>Reset</button>
+        <button
+          className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+          type="button"
+          onClick={saveFilterStatusToLocalStorage}
+        >
+          Save
+        </button>
+        <button
+          className="inline-flex w-full justify-center rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 sm:ml-3 sm:w-auto"
+          type="button"
+          onClick={loadFilterStatusFromLocalStorage}
+        >
+          Load
+        </button>
+        <button
+          className="inline-flex w-full justify-center rounded-md bg-rose-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
+          type="button"
+          onClick={resetLocalStorageFilters}
+        >
+          Reset
+        </button>
       </div>
     </div>
   );
