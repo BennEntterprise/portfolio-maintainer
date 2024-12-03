@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
   setInitialOrgs,
+  setBulkOrgs,
   toggleActive,
   toggleArchive,
   toggleOrg,
@@ -12,8 +13,9 @@ import {
   usePrivateCheckbox,
   usePublicCheckbox,
   useSelectedOrgs,
+  restoreFiltersToTrue,
 } from "../redux/filteringSlice";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 export const FilteringOptions = () => {
   const dispatch = useDispatch();
@@ -35,9 +37,38 @@ export const FilteringOptions = () => {
     return orgs;
   }, [reposRedux]);
 
+  const saveFilterStatusToLocalStorage = () => {
+    localStorage.setItem("filterStatus", JSON.stringify({
+      activeCheckbox,
+      archiveCheckbox,
+      publicCheckbox,
+      privateCheckbox,
+      selectedOrgs
+    }))
+  }
+
+  const loadFilterStatusFromLocalStorage = useCallback( () => {
+    const filterStatus = localStorage.getItem("filterStatus")
+    if (filterStatus) {
+      const filterStatusObj = JSON.parse(filterStatus)
+      dispatch(toggleActive(filterStatusObj.activeCheckbox))
+      dispatch(toggleArchive(filterStatusObj.archiveCheckbox))
+      dispatch(togglePublic(filterStatusObj.publicCheckbox))
+      dispatch(togglePrivate(filterStatusObj.privateCheckbox))
+      dispatch(setBulkOrgs(filterStatusObj.selectedOrgs))
+    }
+  }, [dispatch])
+
+  const resetLocalStorageFilters = () => {
+    localStorage.removeItem("filterStatus")
+    dispatch(restoreFiltersToTrue());
+  }
+
   useEffect(() => {
     dispatch(setInitialOrgs(availableOrgsList));
-  }, [reposRedux, availableOrgsList, dispatch]);
+    loadFilterStatusFromLocalStorage()
+  }, [reposRedux, availableOrgsList, dispatch, loadFilterStatusFromLocalStorage]);
+
 
   return (
     <div className="mb-8">
@@ -127,6 +158,11 @@ export const FilteringOptions = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div id="filter-save-buttons">
+        <button onClick={saveFilterStatusToLocalStorage}>Save</button>
+        <button onClick={loadFilterStatusFromLocalStorage}>Load</button>
+        <button onClick={resetLocalStorageFilters}>Reset</button>
       </div>
     </div>
   );
