@@ -12,6 +12,7 @@ import {
   EyeOff,
   Archive,
   CircleDot,
+  ShieldQuestion,
 } from 'lucide-react';
 import { Repository } from '../types';
 import { formatDistanceToNow } from 'date-fns';
@@ -96,7 +97,7 @@ export function RepoCard({ repo }: RepoCardProps) {
       {repo.description && (
         <p className="text-gray-600 mb-4">{repo.description}</p>
       )}
-
+     
       <div className="flex flex-row">
         <BookOpenCheck
           data-tooltip-id={readmeTooltipId}
@@ -124,14 +125,6 @@ export function RepoCard({ repo }: RepoCardProps) {
         <span className="px-2">{repo.license !== "None" ? "✅" : "❌"}</span>
       </div>
 
-      <div className="flex flex-row">
-        <MemoryStick
-          data-tooltip-id={sizeTooltipId}
-          data-tooltip-content="Size"
-        />
-        <Tooltip id={sizeTooltipId} />
-        <span className="px-2">{repo.size / 1000} KB </span>
-      </div>
 
       <div className="flex flex-row">
         <Container
@@ -139,7 +132,7 @@ export function RepoCard({ repo }: RepoCardProps) {
           data-tooltip-content="Dockerize with Dockerfile"
         />
         <Tooltip id={dockerizedTooltipId} />
-        <span className="px-2">{repo.hasDockerfile ? "✅" : "❌"}</span>
+        <span className="px-2">{repo.hasDockerfile ? "✅" : <ShieldQuestion/>}</span>
       </div>
 
       <div className="flex flex-row">
@@ -148,16 +141,26 @@ export function RepoCard({ repo }: RepoCardProps) {
           data-tooltip-content="Has .devcontainer"
         />
         <Tooltip id={devcontainerTooltipId} />
-        <span className="px-2">{repo.hasDevcontainer ? "✅" : "❌"}</span>
+        <span className="px-2">{repo.hasDevcontainer ? "✅" : <ShieldQuestion/>}</span>
       </div>
 
-      <div className="flex justify-end items-center text-sm text-gray-500">
+      <div className="flex justify-between items-center text-sm text-gray-500">
+      <div className="flex flex-row">
+        <MemoryStick
+          data-tooltip-id={sizeTooltipId}
+          data-tooltip-content="Size"
+        />
+        <Tooltip id={sizeTooltipId} />
+        <span className="px-2">{repo.size / 1000} KB </span>
+      </div>
+      <div className='flex items-center justify-end'>
         <Clock className="w-4 h-4 mr-1" />
-        Last updated{" "}
+        <span>Last updated{" "}
         {repo.updated_at
           ? formatDistanceToNow(new Date(repo.updated_at))
           : "???"}{" "}
-        ago
+        ago</span>
+        </div>
       </div>
     </div>
   );

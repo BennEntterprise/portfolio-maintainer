@@ -1,7 +1,7 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { FilterState } from "./redux/filteringSlice";
-import { Github, Loader, Settings as SettingsCog  } from "lucide-react";
+import { Github, Loader, Settings as SettingsCog, ShieldQuestion  } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { Repository, SortOption } from "./types";
 import { RootState } from "./redux/store";
@@ -129,33 +129,31 @@ function App() {
   ]);
 
 
-  const [satisfactory, unsatisfactory] = useMemo(() => {
+  const [satisfactory, unsatisfactory, optionalMissing] = useMemo(() => {
     let totalCheckboxes = 0;
     let totalXs = 0;
+    let totalOptionalMissing = 0
     filteredAndSortedRepos.forEach((repo) => {
-      // Count up the checkmarks and x's
+      // Count up the Checks, Xs and Optionals
 
+      // Optionals
       if (repo.hasDevcontainer) {
         totalCheckboxes += 1;
       } else {
-        totalXs += 1;
+        totalOptionalMissing += 1;
       }
+
+      if(repo.hasDockerfile){
+        totalCheckboxes += 1;
+      } else {
+        totalOptionalMissing += 1;
+      }
+
+      // Required
       if(repo.readme){
         totalCheckboxes += 1;
       } else {
         totalXs += 1;
-      }
-
-      if(repo.hasDockerfile){
-        totalCheckboxes += 1;
-      } else {
-        totalXs += 1;
-      }
-      
-      if(repo.hasDockerfile){
-        totalCheckboxes+=1
-      } else {
-        totalXs+=1;
       }
 
       if (repo.hasTodo){
@@ -170,7 +168,7 @@ function App() {
         totalXs +=1
       }
     });
-    return [totalCheckboxes, totalXs];
+    return [totalCheckboxes, totalXs, totalOptionalMissing];
   }, [filteredAndSortedRepos]);
 
   const paginatedRepos = useMemo(() => {
@@ -244,7 +242,7 @@ function App() {
         )}
 
         {reposRedux.length > 0 && (
-          <>
+          <div className="flex flex-col items-center">
             <FilteringOptions />
             <Pager
               totalEntries={filteredAndSortedRepos.length}
@@ -253,10 +251,11 @@ function App() {
               onEntriesPerPageChange={setEntriesPerPage}
               onPageChange={setCurrentPage}
             />
-            <div className="w-full flex justify-center m-4">
+            <div className="w-1/2 flex  flex-col items-center justify-center m-4">
               <span>Survey Results: </span> 
               <span>{satisfactory} ✅</span>
               <span>{unsatisfactory} ❌</span>
+              <span className="flex">{optionalMissing} <ShieldQuestion/></span>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {paginatedRepos.map((repo) => (
@@ -273,7 +272,7 @@ function App() {
               onEntriesPerPageChange={setEntriesPerPage}
               onPageChange={setCurrentPage}
             />}
-          </>
+          </div>
         )}
       </div>
     </div>

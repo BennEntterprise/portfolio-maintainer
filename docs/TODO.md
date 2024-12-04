@@ -2,6 +2,7 @@
 
 ## High Priority Todos
 
+[] Look into the count of checks,x and ?s. Seems to be off....
 [] Devops: Containerize, release to Dockerhub and mark a release as V1.
 
 ## Medium Priority Todos
