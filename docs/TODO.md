@@ -5,7 +5,6 @@
 
 ## High Priority Todos
 
-[] Perf: Reduce calls to check for files (do it on one call to the repo instead of 3)
 [] Look into the count of checks,x and ?s. Seems to be off....
 [] feat: MVP A settings tab where you can make different adjustments
 [] feat: light/dark mode in settings. (Toggle Switch Sun/Moon)
@@ -18,12 +17,14 @@
 [] Devops: Add husky pre-commit hooks (lint and build)
 [] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds because we RE-FEtch the repo tree multiple times.)
 [] Devops: Containerize, release to Dockerhub and mark a release as V1
+[] Show Branch number in the card.
 
 ## Low Priority Todos
 
 [] Show some sort of intermediate counter while the repos are loading so the user can understand that stuff is, in fact, happening in the background.
 [] Refactor: The Dropdown that handles ordering should be converted to chips/radio buttons so that it is easier to see all options.
 [] Feat: Use AGGrid to show all of the above items as a grid list, not just as cards.
+[] Use the Repo.language value to display on the card info.
 
 # Done
 
@@ -49,3 +50,4 @@
 [x] 2024-11-29 T 19:24:42 feat: show icon for Active/Archive
 [x] 2024-11-29 T 19:25:56 feat: pagination
 [x] 2024-12-02 Feat: Save filter state in local storage (ensure it can reconcile)****
+[x] 2024-12-04 T 17:13:07 Perf: Reduce calls to check for files (do it on one call to the repo instead of 3) {I was able to shave off a few seconds, but the biggest culprit was the call to get pull requests. And I don't have that on the repo object so it needs to stay. 🥲.}

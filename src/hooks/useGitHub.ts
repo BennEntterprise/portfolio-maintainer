@@ -13,12 +13,12 @@ export function useGitHub() {
 
   /**
    * 
-   * @param {string} owner 
-   * @param {string} repo 
-   * @param  {Array<string>} fileToCheck
-   * @returns {boolean}
+   * @param {string} owner - the owner of a repo (either a username or an org name)
+   * @param {string} repo - the name of the repo
+   * @param  {Array<string>} filesToCheck - an array of strings we will attempt to find in filenames of the repo tree (case-insensitive)
+   * @returns {Map<string, boolean>}
    */
-  async function checkForFilesInTree(owner: string, repo: string, fileToCheck: string) {
+  async function checkForFilesInTree(owner: string, repo: string, filesToCheck: Array<string>) {
     try {
       // Fetch the entire tree of the repository recursively
       const { data } = await octokit.rest.git.getTree({
@@ -31,10 +31,16 @@ export function useGitHub() {
       // Create a set of all file paths in the tree
       const filePaths = new Set(data.tree.map(item => item.path?.toLowerCase()));
 
-      // Check for The File
-      // const fileExists = filePaths.has(fileToCheck.toLowerCase()); // 👈 This only checks for exact (case insensitive match)
-      const fileExistsAsSubstring = Array.from(filePaths).some(filePath => filePath?.toLowerCase().includes(fileToCheck.toLowerCase()))
-      return fileExistsAsSubstring 
+      const searchResults = new Map(filesToCheck.map(fileName => [fileName, false]))
+
+      // Check for The Files
+      const filePathArray = Array.from(filePaths)
+      filesToCheck.forEach(fileNameToFind => {
+        const fileResult = filePathArray.some(filePath => filePath?.includes(fileNameToFind.toLowerCase()))
+        searchResults.set(fileNameToFind, fileResult)
+      })
+
+      return searchResults
     } catch (error) {
       console.error('Error fetching repository tree:', error);
     }
@@ -48,26 +54,21 @@ export function useGitHub() {
       //   per_page: 5
       // })
       const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser)
-      
-
 
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
         data.map(async (repo) => {
-          const [pulls, readme, hasTodo, hasDockerfile, hasDevcontainer] = await Promise.all([
+          console.log(repo)
+          const [pulls, fileSearchResultsMap] = await Promise.all([
             octokit.rest.pulls.list({
               owner: repo.owner.login,
               repo: repo.name,
               state: 'open'
             }),
-            octokit.rest.repos.getReadme({
-              owner: repo.owner.login,
-              repo: repo.name
-            }).catch(() => null),
-            checkForFilesInTree(repo.owner.login, repo.name, 'todo.md'),
-            checkForFilesInTree(repo.owner.login, repo.name, 'Dockerfile'),
-            checkForFilesInTree(repo.owner.login, repo.name, '.devcontainer')
+            checkForFilesInTree(repo.owner.login, repo.name, ['todo.md', 'Dockerfile','.devcontainer']),
           ]);
+
+          console.log(fileSearchResultsMap)
 
           return {
             // Basic Stuff 
@@ -78,7 +79,6 @@ export function useGitHub() {
             html_url: repo.html_url,
             full_name: repo.full_name,
             pulls_count: pulls.data.length,
-            readme: readme ? atob(readme.data.content) : '',
             organization: repo.full_name.split('/')[0],
             open_issues_count: repo.open_issues_count,
             stargazers_count: repo.stargazers_count, 
@@ -89,9 +89,9 @@ export function useGitHub() {
             archived: repo.archived,
             active: !repo.archived,
             license: repo.license?.name || 'None',
-            hasTodo: !!hasTodo,
-            hasDockerfile: !!hasDockerfile,
-            hasDevcontainer: !!hasDevcontainer
+            hasTodo: !!fileSearchResultsMap?.get('todo.md'),
+            hasDockerfile: !!fileSearchResultsMap?.get('dockerfile'),
+            hasDevcontainer: !!fileSearchResultsMap?.get('.devcontainer')
           } satisfies Repository;
         })
       );
