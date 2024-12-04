@@ -1,19 +1,23 @@
 # Todo
 
+# Uncategorized
+
+
 ## High Priority Todos
 
+[] Perf: Reduce calls to check for files (do it on one call to the repo instead of 3)
 [] Look into the count of checks,x and ?s. Seems to be off....
-[] Devops: Containerize, release to Dockerhub and mark a release as V1.
+[] feat: MVP A settings tab where you can make different adjustments
+[] feat: light/dark mode in settings. (Toggle Switch Sun/Moon)
+[] Clean up the header. The settings icon should be over near the right, where a user avatar will eventually live.
+
 
 ## Medium Priority Todos
 
-[] feat: MVP A settings tab where you can make different adjustments
-[] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds)
-[] Perf: Reduce calls to check for files (do it on one call to the repo instead of 3)
-[] Devops: Add husky pre-commit hooks (lint and build)
-[] Feat: Save filter state in local storage (ensure it can reconcile)
 [] Perf: [typed hooks for dispatch and redux state](https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks)
-[] feat: light/dark mode in settings.
+[] Devops: Add husky pre-commit hooks (lint and build)
+[] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds because we RE-FEtch the repo tree multiple times.)
+[] Devops: Containerize, release to Dockerhub and mark a release as V1
 
 ## Low Priority Todos
 
@@ -44,3 +48,4 @@
 [x] 2024-11-29 T 19:14:57 feat: show icon for Public/Private
 [x] 2024-11-29 T 19:24:42 feat: show icon for Active/Archive
 [x] 2024-11-29 T 19:25:56 feat: pagination
+[x] 2024-12-02 Feat: Save filter state in local storage (ensure it can reconcile)****
