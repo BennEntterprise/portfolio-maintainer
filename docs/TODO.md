@@ -5,7 +5,7 @@
 
 ## High Priority Todos
 
-[] Look into the count of checks,x and ?s. Seems to be off....
+[] Look into the count of checks,x and ?s. Seems to be off...., Test with a smaller repo set so that there is a tighter iteration loop in my dev cycle
 [] feat: MVP A settings tab where you can make different adjustments
 [] feat: light/dark mode in settings. (Toggle Switch Sun/Moon)
 [] Clean up the header. The settings icon should be over near the right, where a user avatar will eventually live.
