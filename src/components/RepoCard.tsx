@@ -104,7 +104,7 @@ export function RepoCard({ repo }: RepoCardProps) {
           data-tooltip-content="README.md"
         />
         <Tooltip id={readmeTooltipId} />
-        <span className="px-2">{repo.readme ? "✅" : "❌"}</span>
+        <span className="px-2">{repo.hasReadme ? "✅" : "❌"}</span>
       </div>
 
       <div className="flex flex-row">

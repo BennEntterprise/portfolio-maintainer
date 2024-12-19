@@ -7,7 +7,7 @@ export interface Repository {
   updated_at: string | null;
   open_issues_count: number;
   stargazers_count: number;
-  readme?: string;
+  readme?: string; // This represents the README content, which we can use in as search targets in the search bar
   pulls_count?: number;
   private: boolean;
   size: number
@@ -18,6 +18,7 @@ export interface Repository {
   license: string;
   hasDockerfile: boolean;
   hasDevcontainer: boolean;
+  hasReadme: boolean;
 }
 
 export interface SortOption {

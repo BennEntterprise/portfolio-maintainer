@@ -65,7 +65,7 @@ export function useGitHub() {
               repo: repo.name,
               state: 'open'
             }),
-            checkForFilesInTree(repo.owner.login, repo.name, ['todo.md', 'Dockerfile','.devcontainer']),
+            checkForFilesInTree(repo.owner.login, repo.name, ['todo.md', 'Dockerfile','.devcontainer', 'readme.md']),
           ]);
 
           console.log(fileSearchResultsMap)
@@ -89,6 +89,7 @@ export function useGitHub() {
             archived: repo.archived,
             active: !repo.archived,
             license: repo.license?.name || 'None',
+            hasReadme: !!fileSearchResultsMap?.get('readme.md'),
             hasTodo: !!fileSearchResultsMap?.get('todo.md'),
             hasDockerfile: !!fileSearchResultsMap?.get('dockerfile'),
             hasDevcontainer: !!fileSearchResultsMap?.get('.devcontainer')
@@ -96,7 +97,7 @@ export function useGitHub() {
         })
       );
 
-      setRepos(reposWithDetails as unknown as Repository[]);
+      setRepos(reposWithDetails);
       setError(null);
     } catch (err) {
       setError('Failed to fetch repositories');
