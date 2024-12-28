@@ -150,7 +150,7 @@ function App() {
       }
 
       // Required
-      if(repo.readme){
+      if(repo.hasReadme){
         totalCheckboxes += 1;
       } else {
         totalXs += 1;
