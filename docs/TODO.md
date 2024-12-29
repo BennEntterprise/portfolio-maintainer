@@ -17,7 +17,7 @@
 [] Devops: Add husky pre-commit hooks (lint and build)
 [] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds because we RE-FEtch the repo tree multiple times.)
 [] Devops: Containerize, release to Dockerhub and mark a release as V1
-[] Show Branch number in the card.
+[] Show Branch number in the card, sort by branch count (requires hitting a separate URL and caching to be mindful of rate limits returning 429)
 
 ## Low Priority Todos
 
