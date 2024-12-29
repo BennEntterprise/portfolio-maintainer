@@ -25,6 +25,7 @@
 [] Refactor: The Dropdown that handles ordering should be converted to chips/radio buttons so that it is easier to see all options.
 [] Feat: Use AGGrid to show all of the above items as a grid list, not just as cards.
 [] Use the Repo.language value to display on the card info.
+[] Implement [stack-analyser](https://github.com/specfy/stack-analyser?tab=readme-ov-file)
 
 # Done
 
