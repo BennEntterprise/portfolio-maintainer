@@ -1,7 +1,7 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { FilterState } from "./redux/filteringSlice";
-import { Github, Loader, Settings as SettingsCog, ShieldQuestion  } from "lucide-react";
+import { Github, Loader , ShieldQuestion  } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { Repository, SortOption } from "./types";
 import { RootState } from "./redux/store";
@@ -11,10 +11,11 @@ import { SortSelect } from "./components/SortSelect";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGitHub } from "./hooks/useGitHub";
-import { toggleSettings } from "./redux/settingsSlice";
+import { Footer } from "./components/Footer";
 
 import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
+
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -192,7 +193,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <SettingsCog onClick={() => dispatch(toggleSettings())}/>
       {settingModalOpen && <SettingsModal />}
       <div className="max-w-7xl mx-auto">
         <header className="flex items-center justify-between mb-8">
@@ -274,6 +274,8 @@ function App() {
             />}
           </div>
         )}
+     
+        <Footer />
       </div>
     </div>
   );
