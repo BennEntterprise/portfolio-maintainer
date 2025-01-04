@@ -15,8 +15,9 @@ import { toggleSettings } from "./redux/settingsSlice";
 
 import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
+import { AppHeader } from "./components/AppHeader";
 
-const sortOptions: SortOption[] = [
+export const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
   { label: "Recently Updated", value: "updated", direction: "desc" },
   { label: "Least Pull Requests", value: "pulls", direction: "asc" },
@@ -30,7 +31,7 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
-  const { repos, loading, error, fetchRepos } = useGitHub();
+  const { repos, error } = useGitHub();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -191,33 +192,14 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <SettingsCog onClick={() => dispatch(toggleSettings())}/>
+    <div 
+      id="app-container"
+      className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8"
+      style={{display: 'flex', flexDirection: 'column', alignItems: 'space-between'}}
+      >
       {settingModalOpen && <SettingsModal />}
-      <div className="max-w-7xl mx-auto">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center justify-between w-full">
-            <Github className="w-8 h-8 mr-3" />
-            <h1 className="text-3xl font-bold text-gray-900">
-              GitHub Explorer
-            </h1>
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 flex flex-row items-center justify-center"
-              onClick={fetchRepos}
-            >
-              <span>Fetch Repos</span>
-              <span>
-                {loading && (
-                  <Loader
-                    color="#fff"
-                    className="w-4 h-4 animate-spin text-blue-500 ml-2"
-                  />
-                )}
-              </span>
-            </button>
-          </div>
-        </header>
-
+      <div className="max-w-7xl mx-full ">
+        <AppHeader />
         {reposRedux.length > 0 && (
           <section id="sort-search-filter-options" className="flex flex-col">
             <div
@@ -275,6 +257,7 @@ function App() {
           </div>
         )}
       </div>
+      <SettingsCog onClick={() => dispatch(toggleSettings())}/>
     </div>
   );
 }

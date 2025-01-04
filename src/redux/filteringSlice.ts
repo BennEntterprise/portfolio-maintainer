@@ -30,7 +30,6 @@ export const filterSlice = createSlice({
             }
         },
         toggleActive: (state, action: PayloadAction<boolean | undefined>) => {
-            console.log(action)
             if ( action.payload !== undefined ) {
                 state.activeCheckbox = action.payload;
             } else {

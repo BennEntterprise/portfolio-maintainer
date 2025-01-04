@@ -58,7 +58,6 @@ export function useGitHub() {
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
         data.map(async (repo) => {
-          console.log(repo)
           const [pulls, fileSearchResultsMap] = await Promise.all([
             octokit.rest.pulls.list({
               owner: repo.owner.login,
