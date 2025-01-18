@@ -2,12 +2,9 @@ import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { ShieldQuestion, Loader2Icon } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
-import { SortOption } from "./types";
 import { RootState } from "./redux/store";
-import { SearchBar } from "./components/SearchBar";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
-import { SortSelect } from "./components/SortSelect";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGitHub } from "./hooks/useGitHub";
 import { Footer } from "./components/Footer";
@@ -16,32 +13,18 @@ import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
 import Header from "./components/Header";
 import { openSettings } from "./redux/settingsSlice";
-import { setSearchTerm } from "./redux/searchSlice";
 import { selectSearchedRepos } from "./redux/repoSlice";
-
-const sortOptions: SortOption[] = [
-  { label: "Least Recently Updated", value: "updated", direction: "asc" },
-  { label: "Recently Updated", value: "updated", direction: "desc" },
-  { label: "Least Pull Requests", value: "pulls", direction: "asc" },
-  { label: "Most Pull Requests", value: "pulls", direction: "desc" },
-  { label: "Least Stars", value: "stars", direction: "asc" },
-  { label: "Most Stars", value: "stars", direction: "desc" },
-  { label: "Most Issues", value: "issues", direction: "desc"},
-  { label: "Least Issues", value: "issues", direction: "asc"},
-  { label: "Abc", value: "alphabetical", direction: "asc"},
-  { label: "Zyx", value: "alphabetical", direction: "desc"},
-];
+import { SearchAndSortContainer } from "./components/SearchAndSortContainer";
+import { selectedSortOption } from "./redux/sortingSlice";
 
 function App() {
   const { repos, error, fetchRepos, firstFetchComplete, loading } = useGitHub();
-  const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
   const settingModalOpen = useSelector((state: RootState) => state.settings.settingModalOpen);
-  const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
   const reposRedux = useSelector((state: RootState) => state.repo.value);
-  // const filterState = useSelector((state: RootState) => state.filtering);
+  const selectedSort = useSelector((state: RootState) => selectedSortOption(state));
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -57,10 +40,6 @@ function App() {
   useEffect(() => {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
-
-  const setTerm = useCallback((term: string) => {
-    dispatch(setSearchTerm(term));
-  },[dispatch]);
 
   const filteredAndSortedRepos = useSelector((state: RootState) => selectSearchedRepos(state, selectedSort));
 
@@ -132,26 +111,7 @@ function App() {
       }
 
         {reposRedux.length > 0 && (
-          <section id="sort-search-filter-options" className="flex flex-col">
-            <div
-              id="search-and-filter-controls"
-              className="flex flex-col sm:flex-row gap-4 mb-8"
-            >
-              <div className="flex-1">
-                <SearchBar
-                  searchTerm={searchTerm}
-                  onSearchChange={setTerm}
-                />
-              </div>
-              <div>
-                <SortSelect
-                  options={sortOptions}
-                  selectedSort={selectedSort}
-                  onSortChange={setSelectedSort}
-                />
-              </div>
-            </div>
-          </section>
+          <SearchAndSortContainer />
         )}
 
         {reposRedux.length > 0 && (
