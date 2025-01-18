@@ -14,7 +14,6 @@
 ## Medium Priority Todos
 
 [] Perf: [typed hooks for dispatch and redux state](https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks)
-[] Devops: Add husky pre-commit hooks (lint and build)
 [] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds because we RE-FEtch the repo tree multiple times.)
 [] Devops: Containerize, release to Dockerhub and mark a release as V1
 [] Show Branch number in the card, sort by branch count (requires hitting a separate URL and caching to be mindful of rate limits returning 429)
@@ -52,3 +51,4 @@
 [x] 2024-11-29 T 19:25:56 feat: pagination
 [x] 2024-12-02 Feat: Save filter state in local storage (ensure it can reconcile)****
 [x] 2024-12-04 T 17:13:07 Perf: Reduce calls to check for files (do it on one call to the repo instead of 3) {I was able to shave off a few seconds, but the biggest culprit was the call to get pull requests. And I don't have that on the repo object so it needs to stay. 🥲.}
+[x] 2025-01-18 T 02:32:38 Devops: Add husky pre-commit hooks (lint and build)
