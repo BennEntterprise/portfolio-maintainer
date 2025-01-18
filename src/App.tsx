@@ -73,6 +73,9 @@ function App() {
         case "pulls":
           return multiplier * ((a.pulls_count || 0) - (b.pulls_count || 0));
         case "updated":
+          if(a.updated_at === null || b.updated_at === null){
+            throw (new Error('Updated at is null'))
+          }
           return (
             multiplier *
             (new Date(a.updated_at).getTime() -
