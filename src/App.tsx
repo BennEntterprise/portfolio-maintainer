@@ -1,33 +1,23 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { Loader2Icon } from "lucide-react";
-import { RepoCard } from "./components/RepoCard";
 import { RootState } from "./redux/store";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGitHub } from "./hooks/useGitHub";
 import { Footer } from "./components/Footer";
-import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
 import Header from "./components/Header";
-import SurveyResults from "./components/SurveyResults";
 import { openSettings } from "./redux/settingsSlice";
-import { selectSearchedRepos } from "./redux/repoSlice";
 import { SearchAndSortContainer } from "./components/SearchAndSortContainer";
-import { selectedSortOption } from "./redux/sortingSlice";
+import RepoResultsContainer from "./components/RepoResultsContainer";
 
 function App() {
   const { repos, error, fetchRepos, firstFetchComplete, loading } = useGitHub();
-  const [entriesPerPage, setEntriesPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-
   const settingModalOpen = useSelector(
     (state: RootState) => state.settings.settingModalOpen
   );
   const reposRedux = useSelector((state: RootState) => state.repo.value);
-  const selectedSort = useSelector((state: RootState) =>
-    selectedSortOption(state)
-  );
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -43,18 +33,6 @@ function App() {
   useEffect(() => {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
-
-  const filteredAndSortedRepos = useSelector((state: RootState) =>
-    selectSearchedRepos(state, selectedSort)
-  );
-
-  const paginatedRepos = useMemo(() => {
-    const startIndex = (currentPage - 1) * entriesPerPage;
-    return filteredAndSortedRepos.slice(
-      startIndex,
-      startIndex + entriesPerPage
-    );
-  }, [filteredAndSortedRepos, currentPage, entriesPerPage]);
 
   if (error) {
     return (
@@ -77,36 +55,12 @@ function App() {
             <Loader2Icon className="loading" />
           </div>
         )}
-
-        {reposRedux.length > 0 && <SearchAndSortContainer />}
-
         {reposRedux.length > 0 && (
-          <div className="flex flex-col items-center">
-            <Pager
-              totalEntries={filteredAndSortedRepos.length}
-              entriesPerPage={entriesPerPage}
-              currentPage={currentPage}
-              onEntriesPerPageChange={setEntriesPerPage}
-              onPageChange={setCurrentPage}
-            />
-            <SurveyResults />
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {paginatedRepos.map((repo) => (
-                <RepoCard key={repo.id} repo={repo} />
-              ))}
-            </div>
-            {filteredAndSortedRepos.length > 0 && (
-              <Pager
-                totalEntries={filteredAndSortedRepos.length}
-                entriesPerPage={entriesPerPage}
-                currentPage={currentPage}
-                onEntriesPerPageChange={setEntriesPerPage}
-                onPageChange={setCurrentPage}
-              />
-            )}
-          </div>
+          <>
+            <SearchAndSortContainer />
+            <RepoResultsContainer />
+          </>
         )}
-
         {!firstFetchComplete ? null : <Footer />}
       </div>
     </div>
