@@ -10,6 +10,7 @@ export function useGitHub() {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [firstFetchComplete, setFirstFetchComplete] = useState(false);
 
   /**
    * 
@@ -99,6 +100,7 @@ export function useGitHub() {
 
       setRepos(reposWithDetails);
       setError(null);
+      setFirstFetchComplete(true)
     } catch (err) {
       setError('Failed to fetch repositories');
       console.error(err);
@@ -108,6 +110,7 @@ export function useGitHub() {
   };
   
   return {
+    firstFetchComplete,
     repos,
     loading,
     error,

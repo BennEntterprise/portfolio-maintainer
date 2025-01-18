@@ -1,7 +1,7 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { FilterState } from "./redux/filteringSlice";
-import { Github, Loader , ShieldQuestion  } from "lucide-react";
+import { Github,  ShieldQuestion,  Settings as SettingsCog  } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { Repository, SortOption } from "./types";
 import { RootState } from "./redux/store";
@@ -31,7 +31,7 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
-  const { repos, error, fetchRepos } =  useGitHub();
+  const { repos, error, fetchRepos, firstFetchComplete } =  useGitHub();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -44,12 +44,12 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     const getData = async () => {
+      console.log('Getting Data')
       fetchRepos()
       dispatch(setReposInRedux(repos));
     }
     getData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[dispatch])
+  },[dispatch, fetch])
 
   // We set the repos gathered from the GitHub API
   // to the Redux store. We _could_ have done
@@ -204,25 +204,13 @@ function App() {
       {settingModalOpen && <SettingsModal />}
       <div className="max-w-7xl mx-auto">
         <header className="flex items-center justify-start mb-8">
-          <div className="flex items-center justify-start w-full">
+          <div className="flex items-center justify-between w-full">
             <Github className="w-8 h-8 mr-3" />
             <h1 className="text-3xl font-bold text-gray-900">
               GitHub Explorer
             </h1>
-            {/* <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 flex flex-row items-center justify-center"
-              onClick={fetchRepos}
-            >
-              <span>Fetch Repos</span>
-              <span>
-                {loading && (
-                  <Loader
-                    color="#fff"
-                    className="w-4 h-4 animate-spin text-blue-500 ml-2"
-                  />
-                )}
-              </span>
-            </button> */}
+            <SettingsCog onClick={() => dispatch(toggleSettings())}/>
+
           </div>
         </header>
 
@@ -283,7 +271,7 @@ function App() {
           </div>
         )}
      
-        <Footer />
+        {!firstFetchComplete ? null : <Footer />}
       </div>
     </div>
   );
