@@ -37,6 +37,7 @@ export const FilteringOptions = () => {
     return orgs;
   }, [reposRedux]);
 
+  // TODO: refactor this into a utility file
   const saveFilterStatusToLocalStorage = () => {
     localStorage.setItem("filterStatus", JSON.stringify({
       activeCheckbox,
@@ -47,6 +48,7 @@ export const FilteringOptions = () => {
     }))
   }
 
+  // TODO: refactor this into a utility file
   const loadFilterStatusFromLocalStorage = useCallback( () => {
     const filterStatus = localStorage.getItem("filterStatus")
     if (filterStatus) {
@@ -59,6 +61,7 @@ export const FilteringOptions = () => {
     }
   }, [dispatch])
 
+  // TODO: refactor this into a utility file
   const resetLocalStorageFilters = () => {
     localStorage.removeItem("filterStatus")
     dispatch(restoreFiltersToTrue());
