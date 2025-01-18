@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import SurveyResults from "./SurveyResults";
-import Pager from ".//Pager";
+import Pager from "./Pager";
 import { selectSearchedRepos } from "../redux/repoSlice";
 import { selectedSortOption } from "../redux/sortingSlice";
 import { useSelector } from "react-redux";
@@ -27,14 +26,6 @@ const RepoResultsContainer = () => {
 
   return (
     <div className="flex flex-col items-center">
-    <Pager
-      totalEntries={filteredAndSortedRepos.length}
-      entriesPerPage={entriesPerPage}
-      currentPage={currentPage}
-      onEntriesPerPageChange={setEntriesPerPage}
-      onPageChange={setCurrentPage}
-    />
-    <SurveyResults />
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {paginatedRepos.map((repo) => (
         <RepoCard key={repo.id} repo={repo} />
