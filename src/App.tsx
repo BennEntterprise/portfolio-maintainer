@@ -17,6 +17,7 @@ import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
 import Header from "./components/Header";
 import { openSettings } from "./redux/settingsSlice";
+import { setSearchTerm } from "./redux/searchSlice";
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -33,12 +34,12 @@ const sortOptions: SortOption[] = [
 
 function App() {
   const { repos, error, fetchRepos, firstFetchComplete, loading } = useGitHub();
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const settingModalOpen = useSelector((state: RootState) => state.settings.settingModalOpen);
 
+  const settingModalOpen = useSelector((state: RootState) => state.settings.settingModalOpen);
+  const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
   const reposRedux = useSelector((state: RootState) => state.repo.value);
   const filterState = useSelector((state: RootState) => state.filtering);
 
@@ -56,6 +57,10 @@ function App() {
   useEffect(() => {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
+
+  const setTerm = useCallback((term: string) => {
+    dispatch(setSearchTerm(term));
+  },[dispatch]);
 
   const sortRepos = useCallback((repos: Repository[], option: SortOption) => {
     return [...repos].sort((a, b) => {
@@ -211,7 +216,7 @@ function App() {
               <div className="flex-1">
                 <SearchBar
                   searchTerm={searchTerm}
-                  onSearchChange={setSearchTerm}
+                  onSearchChange={setTerm}
                 />
               </div>
               <div>

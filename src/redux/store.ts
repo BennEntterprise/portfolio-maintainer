@@ -1,3 +1,4 @@
+import searchSlice from './searchSlice';
 import { configureStore } from '@reduxjs/toolkit'
 import filteringSlice from './filteringSlice'
 import repoReducer from './repoSlice'
@@ -7,7 +8,8 @@ export const store = configureStore({
   reducer: {
     repo: repoReducer,
     filtering: filteringSlice,
-    settings: settingsSlice
+    settings: settingsSlice,
+    search: searchSlice
   },
 })
 
