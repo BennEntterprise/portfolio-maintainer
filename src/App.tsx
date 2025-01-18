@@ -1,5 +1,5 @@
 import "react-tooltip/dist/react-tooltip.css";
-import { ShieldQuestion, Loader2Icon } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { RootState } from "./redux/store";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
@@ -7,10 +7,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGitHub } from "./hooks/useGitHub";
 import { Footer } from "./components/Footer";
-
 import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
 import Header from "./components/Header";
+import SurveyResults from "./components/SurveyResults";
 import { openSettings } from "./redux/settingsSlice";
 import { selectSearchedRepos } from "./redux/repoSlice";
 import { SearchAndSortContainer } from "./components/SearchAndSortContainer";
@@ -47,44 +47,6 @@ function App() {
   const filteredAndSortedRepos = useSelector((state: RootState) =>
     selectSearchedRepos(state, selectedSort)
   );
-
-  const [satisfactory, unsatisfactory, optionalMissing] = useMemo(() => {
-    let totalCheckboxes = 0;
-    let totalXs = 0;
-    let totalOptionalMissing = 0;
-    filteredAndSortedRepos.forEach((repo) => {
-      if (repo.hasDevcontainer) {
-        totalCheckboxes += 1;
-      } else {
-        totalOptionalMissing += 1;
-      }
-
-      if (repo.hasDockerfile) {
-        totalCheckboxes += 1;
-      } else {
-        totalOptionalMissing += 1;
-      }
-
-      if (repo.hasReadme) {
-        totalCheckboxes += 1;
-      } else {
-        totalXs += 1;
-      }
-
-      if (repo.hasTodo) {
-        totalCheckboxes += 1;
-      } else {
-        totalXs += 1;
-      }
-
-      if (repo.license) {
-        totalCheckboxes += 1;
-      } else {
-        totalXs += 1;
-      }
-    });
-    return [totalCheckboxes, totalXs, totalOptionalMissing];
-  }, [filteredAndSortedRepos]);
 
   const paginatedRepos = useMemo(() => {
     const startIndex = (currentPage - 1) * entriesPerPage;
@@ -127,14 +89,7 @@ function App() {
               onEntriesPerPageChange={setEntriesPerPage}
               onPageChange={setCurrentPage}
             />
-            <div className="w-1/2 flex  flex-col items-center justify-center m-4">
-              <span>Survey Results: </span>
-              <span>{satisfactory} ✅</span>
-              <span>{unsatisfactory} ❌</span>
-              <span className="flex">
-                {optionalMissing} <ShieldQuestion />
-              </span>
-            </div>
+            <SurveyResults />
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {paginatedRepos.map((repo) => (
                 <RepoCard key={repo.id} repo={repo} />
