@@ -1,7 +1,7 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { FilterState } from "./redux/filteringSlice";
-import { Github,  ShieldQuestion,  Settings as SettingsCog, Loader2Icon  } from "lucide-react";
+import { ShieldQuestion, Loader2Icon  } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { Repository, SortOption } from "./types";
 import { RootState } from "./redux/store";

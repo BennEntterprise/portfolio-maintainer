@@ -13,7 +13,6 @@ const Pager: React.FC<PagerProps> = ({
   totalEntries,
   entriesPerPage,
   currentPage,
-  onEntriesPerPageChange,
   onPageChange,
 }) => {
   const totalPages = Math.ceil(totalEntries / entriesPerPage);
