@@ -1,7 +1,7 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { FilterState } from "./redux/filteringSlice";
-import { Github,  ShieldQuestion,  Settings as SettingsCog  } from "lucide-react";
+import { Github,  ShieldQuestion,  Settings as SettingsCog, Loader2Icon  } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { Repository, SortOption } from "./types";
 import { RootState } from "./redux/store";
@@ -32,7 +32,7 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
-  const { repos, error, fetchRepos, firstFetchComplete } =  useGitHub();
+  const { repos, error, fetchRepos, firstFetchComplete, loading } =  useGitHub();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -45,11 +45,12 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     const getData = async () => {
-      console.log('Getting Data')
       fetchRepos()
       dispatch(setReposInRedux(repos));
     }
     getData()
+    // HACK: Listening to ESLint here will result in an infinite loop. I probably have an anti-patter I want to address.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dispatch, fetch])
 
   // We set the repos gathered from the GitHub API
@@ -205,6 +206,10 @@ function App() {
       {settingModalOpen && <SettingsModal />}
       <div className="max-w-7xl mx-auto">
        <Header />
+       {loading && <div className='flex w-full justify-center'>
+        <Loader2Icon className='loading'/>
+       </div>
+      }
 
         {reposRedux.length > 0 && (
           <section id="sort-search-filter-options" className="flex flex-col">
