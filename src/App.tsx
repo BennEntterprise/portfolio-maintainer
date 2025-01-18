@@ -16,6 +16,7 @@ import { Footer } from "./components/Footer";
 import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
 import Header from "./components/Header";
+import { openSettings } from "./redux/settingsSlice";
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -43,21 +44,15 @@ function App() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const getData = async () => {
-      fetchRepos()
-      dispatch(setReposInRedux(repos));
+    const token = localStorage.getItem('VITE_GITHUB_TOKEN');
+    if (!token) {
+      dispatch(openSettings());
+    } else {
+      fetchRepos();
     }
-    getData()
-    // HACK: Listening to ESLint here will result in an infinite loop. I probably have an anti-patter I want to address.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[dispatch, fetch])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // We set the repos gathered from the GitHub API
-  // to the Redux store. We _could_ have done
-  // this in the useGitHub hook, but I want
-  // to keep hook logic separate
-  // from Redux logic which is
-  // why we're doing it here.
   useEffect(() => {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
@@ -125,7 +120,6 @@ function App() {
     []
   );
 
-  // Get the Sorted/Filtered Repos from Redux
   const filteredAndSortedRepos = useMemo(() => {
     const filtered = filterRepos(reposRedux, filterState);
     const sorted = sortRepos(filtered, selectedSort);
@@ -146,9 +140,6 @@ function App() {
     let totalXs = 0;
     let totalOptionalMissing = 0
     filteredAndSortedRepos.forEach((repo) => {
-      // Count up the Checks, Xs and Optionals
-
-      // Optionals
       if (repo.hasDevcontainer) {
         totalCheckboxes += 1;
       } else {
@@ -161,7 +152,6 @@ function App() {
         totalOptionalMissing += 1;
       }
 
-      // Required
       if(repo.hasReadme){
         totalCheckboxes += 1;
       } else {

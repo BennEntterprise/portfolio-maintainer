@@ -64,6 +64,7 @@ export const FilteringOptions = () => {
   // TODO: refactor this into a utility file
   const resetLocalStorageFilters = () => {
     localStorage.removeItem("filterStatus")
+    localStorage.removeItem("VITE_GITHUB_TOKEN")
     dispatch(restoreFiltersToTrue());
   }
 

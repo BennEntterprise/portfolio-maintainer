@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Repository } from '../types';
 
 const octokit = new Octokit({
-  auth: import.meta.env.VITE_GITHUB_TOKEN
+  auth: localStorage.getItem('VITE_GITHUB_TOKEN')
 });
 
 export function useGitHub() {
