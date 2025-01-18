@@ -195,13 +195,13 @@ function App() {
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       {settingModalOpen && <SettingsModal />}
       <div className="max-w-7xl mx-auto">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center justify-between w-full">
+        <header className="flex items-center justify-start mb-8">
+          <div className="flex items-center justify-start w-full">
             <Github className="w-8 h-8 mr-3" />
             <h1 className="text-3xl font-bold text-gray-900">
               GitHub Explorer
             </h1>
-            <button
+            {/* <button
               className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 flex flex-row items-center justify-center"
               onClick={fetchRepos}
             >
@@ -214,7 +214,7 @@ function App() {
                   />
                 )}
               </span>
-            </button>
+            </button> */}
           </div>
         </header>
 
