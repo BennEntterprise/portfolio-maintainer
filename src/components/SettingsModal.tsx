@@ -12,11 +12,11 @@ const SettingsModal = () => {
       aria-modal="true"
     >
       <div
-        id='dialog-wrapper' 
+        id='dialog-wrapper'
         className="relative w-[80vw] h-[80vh]  max-w-4xl p-8 bg-white rounded-lg shadow-xl"
         >
         <div
-          id='dialog-header' 
+          id='dialog-header'
           className="flex justify-between items-center mb-4"
           >
           <h3 className="text-2xl font-semibold text-gray-900" id="modal-title">
@@ -30,7 +30,7 @@ const SettingsModal = () => {
           </button>
         </div>
         <div
-          id='dialog-main' 
+          id='dialog-main'
           className="mt-4">
           <p className="text-gray-700">Settings content goes here...</p>
         </div>

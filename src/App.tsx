@@ -1,7 +1,7 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { FilterState } from "./redux/filteringSlice";
-import { ShieldQuestion, Loader2Icon  } from "lucide-react";
+import { ShieldQuestion, Loader2Icon } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { Repository, SortOption } from "./types";
 import { RootState } from "./redux/store";
@@ -17,7 +17,6 @@ import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
 import Header from "./components/Header";
 
-
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
   { label: "Recently Updated", value: "updated", direction: "desc" },
@@ -32,7 +31,7 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
-  const { repos, error, fetchRepos, firstFetchComplete, loading } =  useGitHub();
+  const { repos, error, fetchRepos, firstFetchComplete, loading } = useGitHub();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -142,7 +141,6 @@ function App() {
     filterState,
   ]);
 
-
   const [satisfactory, unsatisfactory, optionalMissing] = useMemo(() => {
     let totalCheckboxes = 0;
     let totalXs = 0;
@@ -248,7 +246,7 @@ function App() {
               onPageChange={setCurrentPage}
             />
             <div className="w-1/2 flex  flex-col items-center justify-center m-4">
-              <span>Survey Results: </span> 
+              <span>Survey Results: </span>
               <span>{satisfactory} ✅</span>
               <span>{unsatisfactory} ❌</span>
               <span className="flex">{optionalMissing} <ShieldQuestion/></span>
@@ -270,7 +268,7 @@ function App() {
             />}
           </div>
         )}
-     
+
         {!firstFetchComplete ? null : <Footer />}
       </div>
     </div>

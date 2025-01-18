@@ -13,7 +13,7 @@ export function useGitHub() {
   const [firstFetchComplete, setFirstFetchComplete] = useState(false);
 
   /**
-   * 
+   *
    * @param {string} owner - the owner of a repo (either a username or an org name)
    * @param {string} repo - the name of the repo
    * @param  {Array<string>} filesToCheck - an array of strings we will attempt to find in filenames of the repo tree (case-insensitive)
@@ -28,7 +28,7 @@ export function useGitHub() {
         tree_sha: 'HEAD', // Start from the latest commit on the default branch
         recursive: 'true'   // Fetch the tree recursively
       });
-  
+
       // Create a set of all file paths in the tree
       const filePaths = new Set(data.tree.map(item => item.path?.toLowerCase()));
 
@@ -69,7 +69,7 @@ export function useGitHub() {
           ]);
 
           return {
-            // Basic Stuff 
+            // Basic Stuff
             id: repo.id,
             name: repo.name,
             updated_at: repo.updated_at,
@@ -79,10 +79,10 @@ export function useGitHub() {
             pulls_count: pulls.data.length,
             organization: repo.full_name.split('/')[0],
             open_issues_count: repo.open_issues_count,
-            stargazers_count: repo.stargazers_count, 
+            stargazers_count: repo.stargazers_count,
 
             // Card Stuff
-            private: !!repo.private, 
+            private: !!repo.private,
             size: repo.size,
             archived: repo.archived,
             active: !repo.archived,
@@ -105,7 +105,7 @@ export function useGitHub() {
       setLoading(false);
     }
   };
-  
+
   return {
     firstFetchComplete,
     repos,

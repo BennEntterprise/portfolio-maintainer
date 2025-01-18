@@ -69,12 +69,11 @@ export const FilteringOptions = () => {
     loadFilterStatusFromLocalStorage()
   }, [reposRedux, availableOrgsList, dispatch, loadFilterStatusFromLocalStorage]);
 
-
   return (
-    <div 
+    <div
       id="filtering-options"
       className="my-4 mx-1 border-2 rounded-md border-black-100 p-8 bg-slate-200"
-      
+
       >
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
@@ -161,7 +160,7 @@ export const FilteringOptions = () => {
           ))}
         </div>
       </div>
-      <div 
+      <div
         id="filter-save-buttons"
         className="w-full flex justify-center mt-4"
       >

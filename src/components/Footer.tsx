@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux'
 
 export const Footer = () => {
   const dispatch = useDispatch()
-  
-  return(  
+
+  return(
     <footer className='flex justify-end'>
       <SettingsCog onClick={() => dispatch(toggleSettings())}/>
     </footer>

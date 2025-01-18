@@ -1,12 +1,12 @@
-import { 
-  BookOpenCheck, 
-  Copyright, 
-  GitPullRequest, 
+import {
+  BookOpenCheck,
+  Copyright,
+  GitPullRequest,
   Star,
-  Container, 
-  Clock, 
+  Container,
+  Clock,
   ListTodo,
-  MemoryStick, 
+  MemoryStick,
   Unplug,
   EyeIcon,
   EyeOff,
@@ -67,7 +67,6 @@ export function RepoCard({ repo }: RepoCardProps) {
       )
   },[archivedReopTooltipId])
 
-
   return (
     <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48">
       <div className="flex justify-between items-center mb-4">
@@ -97,7 +96,7 @@ export function RepoCard({ repo }: RepoCardProps) {
       {repo.description && (
         <p className="text-gray-600 mb-4">{repo.description}</p>
       )}
-     
+
       <div className="flex flex-row">
         <BookOpenCheck
           data-tooltip-id={readmeTooltipId}
@@ -124,7 +123,6 @@ export function RepoCard({ repo }: RepoCardProps) {
         <Tooltip id={licenseTooltipId} />
         <span className="px-2">{repo.license !== "None" ? "✅" : "❌"}</span>
       </div>
-
 
       <div className="flex flex-row">
         <Container

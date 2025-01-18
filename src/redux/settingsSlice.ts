@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-
 interface SettingsState {
     settingModalOpen: boolean;
 }
@@ -24,7 +23,6 @@ export const settingsSlice = createSlice({
         }
     }
 })
-
 
 export const { openSettings, closeSettings, toggleSettings } = settingsSlice.actions
 export default settingsSlice.reducer

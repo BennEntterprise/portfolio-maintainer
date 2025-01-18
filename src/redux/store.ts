@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import filteringSlice  from './filteringSlice'
+import filteringSlice from './filteringSlice'
 import repoReducer from './repoSlice'
 import settingsSlice from './settingsSlice'
 
@@ -10,7 +10,6 @@ export const store = configureStore({
     settings: settingsSlice
   },
 })
-
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>

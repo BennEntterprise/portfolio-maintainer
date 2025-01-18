@@ -19,7 +19,7 @@ export function SortSelect({ options, selectedSort, onSortChange }: SortSelectPr
       className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
     >
       {options.map((option) => (
-        <option 
+        <option
           key={`${option.value}-${option.direction}`}
           value={`${option.value}-${option.direction}`}
         >
