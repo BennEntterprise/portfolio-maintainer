@@ -15,6 +15,7 @@ import { Footer } from "./components/Footer";
 
 import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
+import Header from "./components/Header";
 
 
 const sortOptions: SortOption[] = [
@@ -203,16 +204,7 @@ function App() {
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       {settingModalOpen && <SettingsModal />}
       <div className="max-w-7xl mx-auto">
-        <header className="flex items-center justify-start mb-8">
-          <div className="flex items-center justify-between w-full">
-            <Github className="w-8 h-8 mr-3" />
-            <h1 className="text-3xl font-bold text-gray-900">
-              GitHub Explorer
-            </h1>
-            <SettingsCog onClick={() => dispatch(toggleSettings())}/>
-
-          </div>
-        </header>
+       <Header />
 
         {reposRedux.length > 0 && (
           <section id="sort-search-filter-options" className="flex flex-col">
