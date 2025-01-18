@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { closeSettings } from "../redux/settingsSlice";
 import { useState } from "react";
+import { FilteringOptions } from "./FilteringOptions";
 
 const SettingsModal = () => {
   const dispatch = useDispatch();
@@ -54,6 +55,9 @@ const SettingsModal = () => {
           >
             Save
           </button>
+        </div>
+        <div>
+          <FilteringOptions />
         </div>
       </div>
     </div>

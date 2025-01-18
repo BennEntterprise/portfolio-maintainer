@@ -1,5 +1,4 @@
 import "react-tooltip/dist/react-tooltip.css";
-import { FilteringOptions } from "./components/FilteringOptions";
 import { ShieldQuestion, Loader2Icon } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { RootState } from "./redux/store";
@@ -116,7 +115,6 @@ function App() {
 
         {reposRedux.length > 0 && (
           <div className="flex flex-col items-center">
-            <FilteringOptions />
             <Pager
               totalEntries={filteredAndSortedRepos.length}
               entriesPerPage={entriesPerPage}
