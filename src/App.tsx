@@ -1,9 +1,8 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
-import { FilterState } from "./redux/filteringSlice";
 import { ShieldQuestion, Loader2Icon } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
-import { Repository, SortOption } from "./types";
+import { SortOption } from "./types";
 import { RootState } from "./redux/store";
 import { SearchBar } from "./components/SearchBar";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
@@ -18,6 +17,7 @@ import SettingsModal from "./components/SettingsModal";
 import Header from "./components/Header";
 import { openSettings } from "./redux/settingsSlice";
 import { setSearchTerm } from "./redux/searchSlice";
+import { selectSearchedRepos } from "./redux/repoSlice";
 
 const sortOptions: SortOption[] = [
   { label: "Least Recently Updated", value: "updated", direction: "asc" },
@@ -41,7 +41,7 @@ function App() {
   const settingModalOpen = useSelector((state: RootState) => state.settings.settingModalOpen);
   const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
   const reposRedux = useSelector((state: RootState) => state.repo.value);
-  const filterState = useSelector((state: RootState) => state.filtering);
+  // const filterState = useSelector((state: RootState) => state.filtering);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -62,83 +62,7 @@ function App() {
     dispatch(setSearchTerm(term));
   },[dispatch]);
 
-  const sortRepos = useCallback((repos: Repository[], option: SortOption) => {
-    return [...repos].sort((a, b) => {
-      const multiplier = option.direction === "desc" ? -1 : 1;
-
-      switch (option.value) {
-        case 'alphabetical':
-          return multiplier * a.name.localeCompare(b.name)
-        case "pulls":
-          return multiplier * ((a.pulls_count || 0) - (b.pulls_count || 0));
-        case "updated":
-          if(a.updated_at === null || b.updated_at === null){
-            throw (new Error('Updated at is null'))
-          }
-          return (
-            multiplier *
-            (new Date(a.updated_at).getTime() -
-              new Date(b.updated_at).getTime())
-          );
-        case "stars":
-          return multiplier * (a.stargazers_count - b.stargazers_count);
-        case 'issues':
-          return multiplier * (a.open_issues_count -b.open_issues_count)
-        default:
-          return 0;
-      }
-    });
-  }, []);
-
-  const searchRepos = useCallback(
-    (reposRedux: Repository[], searchTerm: string) => {
-      const term = searchTerm.toLowerCase();
-      return reposRedux.filter(
-        (repo) =>
-          repo.name.toLowerCase().includes(term) ||
-          repo.description?.toLowerCase().includes(term) ||
-          repo.readme?.toLowerCase().includes(term)
-      );
-    },
-    []
-  );
-
-  const filterRepos = useCallback(
-    (repos: Repository[], filterState: FilterState) => {
-      return repos.filter((repo) => {
-        const isArchived = !filterState.archiveCheckbox && repo.archived;
-        const isActive = !filterState.activeCheckbox && !repo.archived;
-        const isPublic = !filterState.publicCheckbox && !repo.private;
-        const isPrivate = !filterState.privateCheckbox && repo.private;
-        const isOrgSelected =
-          !filterState.selectedOrgs[repo.organization || ""];
-
-        return !(
-          isArchived ||
-          isActive ||
-          isPublic ||
-          isPrivate ||
-          isOrgSelected
-        );
-      });
-    },
-    []
-  );
-
-  const filteredAndSortedRepos = useMemo(() => {
-    const filtered = filterRepos(reposRedux, filterState);
-    const sorted = sortRepos(filtered, selectedSort);
-    const searchedRepos = searchRepos(sorted, searchTerm);
-    return searchedRepos;
-  }, [
-    reposRedux,
-    searchTerm,
-    selectedSort,
-    searchRepos,
-    sortRepos,
-    filterRepos,
-    filterState,
-  ]);
+  const filteredAndSortedRepos = useSelector((state: RootState) => selectSearchedRepos(state, selectedSort));
 
   const [satisfactory, unsatisfactory, optionalMissing] = useMemo(() => {
     let totalCheckboxes = 0;
