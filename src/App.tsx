@@ -31,7 +31,7 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
-  const { repos, loading, error, fetchRepos } = useGitHub();
+  const { repos, error, fetchRepos } =  useGitHub();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -42,6 +42,14 @@ function App() {
   const filterState = useSelector((state: RootState) => state.filtering);
 
   const dispatch = useDispatch();
+  useEffect(() => {
+    const getData = async () => {
+      fetchRepos()
+      dispatch(setReposInRedux(repos));
+    }
+    getData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[dispatch])
 
   // We set the repos gathered from the GitHub API
   // to the Redux store. We _could_ have done
