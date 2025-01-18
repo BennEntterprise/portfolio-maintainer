@@ -50,8 +50,9 @@ const SurveyResults = () => {
     });
     return [totalCheckboxes, totalXs, totalOptionalMissing];
   }, [filteredAndSortedRepos]);
+
   return (
-    <div className="w-1/2 flex  flex-col items-center justify-center m-4">
+    <div className="w-1/2 flex  flex-row items-center justify-center m-4">
       <span>Survey Results: </span>
       <span>{satisfactory} ✅</span>
       <span>{unsatisfactory} ❌</span>
