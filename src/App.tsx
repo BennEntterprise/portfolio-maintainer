@@ -95,9 +95,6 @@ function App() {
                 <RepoCard key={repo.id} repo={repo} />
               ))}
             </div>
-            <div className="flex flex w-full justify-around">
-              <p>Search Results: {filteredAndSortedRepos.length} Repos</p>
-            </div>
             {filteredAndSortedRepos.length > 0 && (
               <Pager
                 totalEntries={filteredAndSortedRepos.length}
