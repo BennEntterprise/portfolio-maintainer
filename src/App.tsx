@@ -1,7 +1,7 @@
 import "react-tooltip/dist/react-tooltip.css";
 import { FilteringOptions } from "./components/FilteringOptions";
 import { FilterState } from "./redux/filteringSlice";
-import { Github, Loader , ShieldQuestion  } from "lucide-react";
+import { Github,  ShieldQuestion,  Settings as SettingsCog, Loader2Icon  } from "lucide-react";
 import { RepoCard } from "./components/RepoCard";
 import { Repository, SortOption } from "./types";
 import { RootState } from "./redux/store";
@@ -15,6 +15,7 @@ import { Footer } from "./components/Footer";
 
 import Pager from "./components/Pager";
 import SettingsModal from "./components/SettingsModal";
+import Header from "./components/Header";
 
 
 const sortOptions: SortOption[] = [
@@ -31,7 +32,7 @@ const sortOptions: SortOption[] = [
 ];
 
 function App() {
-  const { repos, loading, error, fetchRepos } = useGitHub();
+  const { repos, error, fetchRepos, firstFetchComplete, loading } =  useGitHub();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
@@ -42,6 +43,15 @@ function App() {
   const filterState = useSelector((state: RootState) => state.filtering);
 
   const dispatch = useDispatch();
+  useEffect(() => {
+    const getData = async () => {
+      fetchRepos()
+      dispatch(setReposInRedux(repos));
+    }
+    getData()
+    // HACK: Listening to ESLint here will result in an infinite loop. I probably have an anti-patter I want to address.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[dispatch, fetch])
 
   // We set the repos gathered from the GitHub API
   // to the Redux store. We _could_ have done
@@ -195,28 +205,11 @@ function App() {
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       {settingModalOpen && <SettingsModal />}
       <div className="max-w-7xl mx-auto">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center justify-between w-full">
-            <Github className="w-8 h-8 mr-3" />
-            <h1 className="text-3xl font-bold text-gray-900">
-              GitHub Explorer
-            </h1>
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 flex flex-row items-center justify-center"
-              onClick={fetchRepos}
-            >
-              <span>Fetch Repos</span>
-              <span>
-                {loading && (
-                  <Loader
-                    color="#fff"
-                    className="w-4 h-4 animate-spin text-blue-500 ml-2"
-                  />
-                )}
-              </span>
-            </button>
-          </div>
-        </header>
+       <Header />
+       {loading && <div className='flex w-full justify-center'>
+        <Loader2Icon className='loading'/>
+       </div>
+      }
 
         {reposRedux.length > 0 && (
           <section id="sort-search-filter-options" className="flex flex-col">
@@ -275,7 +268,7 @@ function App() {
           </div>
         )}
      
-        <Footer />
+        {!firstFetchComplete ? null : <Footer />}
       </div>
     </div>
   );

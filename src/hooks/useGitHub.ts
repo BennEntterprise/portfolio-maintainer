@@ -10,6 +10,7 @@ export function useGitHub() {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [firstFetchComplete, setFirstFetchComplete] = useState(false);
 
   /**
    * 
@@ -58,7 +59,6 @@ export function useGitHub() {
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
         data.map(async (repo) => {
-          console.log(repo)
           const [pulls, fileSearchResultsMap] = await Promise.all([
             octokit.rest.pulls.list({
               owner: repo.owner.login,
@@ -67,8 +67,6 @@ export function useGitHub() {
             }),
             checkForFilesInTree(repo.owner.login, repo.name, ['todo.md', 'Dockerfile','.devcontainer', 'readme.md']),
           ]);
-
-          console.log(fileSearchResultsMap)
 
           return {
             // Basic Stuff 
@@ -99,6 +97,7 @@ export function useGitHub() {
 
       setRepos(reposWithDetails);
       setError(null);
+      setFirstFetchComplete(true)
     } catch (err) {
       setError('Failed to fetch repositories');
       console.error(err);
@@ -108,6 +107,7 @@ export function useGitHub() {
   };
   
   return {
+    firstFetchComplete,
     repos,
     loading,
     error,
