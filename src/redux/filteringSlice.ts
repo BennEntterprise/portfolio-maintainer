@@ -88,6 +88,14 @@ export const filterSlice = createSlice({
                 return acc;
             }, {});
             state.selectedOrgs = orgs;
+        },
+        setAllFilters: (state, action: PayloadAction<FilterState>) => {
+            state.archiveCheckbox = action.payload.archiveCheckbox;
+            state.activeCheckbox = action.payload.activeCheckbox;
+            state.publicCheckbox = action.payload.publicCheckbox;
+            state.privateCheckbox = action.payload.privateCheckbox;
+            state.selectedOrgs = action.payload.selectedOrgs;
+
         }
     },
 })
@@ -106,7 +114,8 @@ export const {
     togglePrivate,
     toggleOrg,
     restoreFiltersToTrue,
-    setInitialOrgs
+    setInitialOrgs,
+    setAllFilters
 } = filterSlice.actions
 
 export default filterSlice.reducer

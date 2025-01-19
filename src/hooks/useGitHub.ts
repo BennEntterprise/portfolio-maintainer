@@ -2,7 +2,7 @@ import { Octokit } from 'octokit';
 import { useState } from 'react';
 import { Repository } from '../types';
 import { useDispatch } from 'react-redux';
-import { setInitialOrgs } from '../redux/filteringSlice';
+import { setAllFilters, setInitialOrgs } from '../redux/filteringSlice';
 
 const octokit = new Octokit({
   auth: localStorage.getItem('VITE_GITHUB_TOKEN')
@@ -110,6 +110,12 @@ export function useGitHub() {
       setError(null);
       setFirstFetchComplete(true)
       dispatch(setInitialOrgs(orgs))
+      // Fetch filterState from localStorage
+      const filterState = localStorage.getItem('filterStatus');
+      if (filterState) {
+        const parsedFilterState = JSON.parse(filterState);
+        dispatch(setAllFilters(parsedFilterState));
+      }
     } catch (err) {
       setError('Failed to fetch repositories');
       console.error(err);
