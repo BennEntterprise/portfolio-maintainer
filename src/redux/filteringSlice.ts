@@ -10,12 +10,26 @@ export interface FilterState {
     selectedOrgs: Record<string, boolean>;
 }
 
-const initialState: FilterState = {
-    archiveCheckbox: true,
-    activeCheckbox: true,
-    publicCheckbox: true,
-    privateCheckbox: true,
-    selectedOrgs: {},
+const savedFilterStatus = localStorage.getItem("filterStatus")
+let initialState;
+if (savedFilterStatus) {
+  const filterStatusObj = JSON.parse(savedFilterStatus)
+  initialState = {
+    archiveCheckbox:  filterStatusObj.activeCheckbox,
+    activeCheckbox:  filterStatusObj.archiveCheckbox,
+    publicCheckbox:  filterStatusObj.publicCheckbox,
+    privateCheckbox:  filterStatusObj.privateCheckbox,
+    selectedOrgs:  filterStatusObj.selectedOrgs
+}
+} else {
+
+  initialState = {
+        archiveCheckbox: true,
+        activeCheckbox: true,
+        publicCheckbox: true,
+        privateCheckbox: true,
+        selectedOrgs: {},
+    }
 }
 
 export const filterSlice = createSlice({
