@@ -1,30 +1,19 @@
 # Todo
 
-# Uncategorized
+Tasks for this repo are now being tracked in [Github Issues](https://github.com/BennEntterprise/portfolio-maintainer/issues)
 
+## Moved to issues 2025-01-19
 
-## High Priority Todos
-
-[] Look into the count of checks,x and ?s. Seems to be off...., Test with a smaller repo set so that there is a tighter iteration loop in my dev cycle
-[] feat: MVP A settings tab where you can make different adjustments
-[] feat: light/dark mode in settings. (Toggle Switch Sun/Moon)
-[] Clean up the header. The settings icon should be over near the right, where a user avatar will eventually live.
-
-
-## Medium Priority Todos
-
-[] Perf: [typed hooks for dispatch and redux state](https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks)
-[] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds because we RE-FEtch the repo tree multiple times.)
-[] Devops: Containerize, release to Dockerhub and mark a release as V1
-[] Show Branch number in the card, sort by branch count (requires hitting a separate URL and caching to be mindful of rate limits returning 429)
-
-## Low Priority Todos
-
-[] Show some sort of intermediate counter while the repos are loading so the user can understand that stuff is, in fact, happening in the background.
-[] Refactor: The Dropdown that handles ordering should be converted to chips/radio buttons so that it is easier to see all options.
-[] Feat: Use AGGrid to show all of the above items as a grid list, not just as cards.
-[] Use the Repo.language value to display on the card info.
-[] Implement [stack-analyser](https://github.com/specfy/stack-analyser?tab=readme-ov-file)
+[x] Look into the count of checks,x and ?s. Seems to be off...., Test with a smaller repo set so that there is a tighter iteration loop in my dev cycle
+[x] feat: MVP A settings tab where you can make different adjustments
+[x] feat: light/dark mode in settings. (Toggle Switch Sun/Moon)
+[x] Perf: [typed hooks for dispatch and redux state](https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks)
+[x] Devops: Containerize, release to Dockerhub and mark a release as V1
+[x] Show Branch number in the card, sort by branch count (requires hitting a separate URL and caching to be mindful of rate limits returning 429)
+[x] Show some sort of intermediate counter while the repos are loading so the user can understand that stuff is, in fact, happening in the background.
+[x] Feat: Use AGGrid to show all of the above items as a grid list, not just as cards.
+[x] Use the Repo.language value to display on the card info.
+[x] Implement [stack-analyser](https://github.com/specfy/stack-analyser?tab=readme-ov-file)
 
 # Done
 
@@ -52,3 +41,5 @@
 [x] 2024-12-02 Feat: Save filter state in local storage (ensure it can reconcile)****
 [x] 2024-12-04 T 17:13:07 Perf: Reduce calls to check for files (do it on one call to the repo instead of 3) {I was able to shave off a few seconds, but the biggest culprit was the call to get pull requests. And I don't have that on the repo object so it needs to stay. 🥲.}
 [x] 2025-01-18 T 02:32:38 Devops: Add husky pre-commit hooks (lint and build)
+[x] Clean up the header. The settings icon should be over near the right, where a user avatar will eventually live.
+[x] Perf: Speed up the re-render on sorting/filter change. (Right now its several seconds because we RE-FEtch the repo tree multiple times.)
