@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { closeSettings } from "../../redux/settingsSlice";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FilteringOptions } from "./FilteringOptions";
 
 const SettingsModal = () => {
@@ -12,6 +12,19 @@ const SettingsModal = () => {
     dispatch(closeSettings());
     window.location.reload(); // Reload to fetch repos with the new token
   };
+
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      dispatch(closeSettings());
+    }
+  },[dispatch]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   return (
     <div
