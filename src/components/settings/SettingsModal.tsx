@@ -23,7 +23,7 @@ const SettingsModal = () => {
     >
       <div
         id='dialog-wrapper'
-        className="relative w-[80vw] h-[80vh]  max-w-4xl p-8 bg-white rounded-lg shadow-xl"
+        className="relative w-[80vw] h-[80vh]  max-w-4xl p-8 bg-white rounded-lg shadow-xl overflow-scroll"
         >
         <div
           id='dialog-header'
