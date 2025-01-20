@@ -29,7 +29,7 @@ export default repoSlice.reducer
 export const selectRepos = (state: RootState) => state.repo.value
 
 export const selectFilteredRepos = createSelector(
-    [selectRepos, (state: RootState) => state.filtering],
+    [selectRepos, (state: RootState) => state.settings.filters],
     (repos, filterState: FilterState) => {
         return repos.filter((repo) => {
             const isArchived = !filterState.archiveCheckbox && repo.archived;

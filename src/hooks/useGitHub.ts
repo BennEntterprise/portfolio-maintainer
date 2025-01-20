@@ -2,7 +2,7 @@ import { Octokit } from 'octokit';
 import { useState } from 'react';
 import { Repository } from '../types';
 import { useDispatch } from 'react-redux';
-import { setAllFilters, setInitialOrgs } from '../redux/filteringSlice';
+import { setAllFilters, setInitialOrgs } from '../redux/settingsSlice';
 
 const octokit = new Octokit({
   auth: localStorage.getItem('VITE_GITHUB_TOKEN')

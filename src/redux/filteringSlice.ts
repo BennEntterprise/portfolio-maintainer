@@ -100,11 +100,11 @@ export const filterSlice = createSlice({
     },
 })
 
-export const useArchiveCheckbox = () => useSelector((state: RootState) => state.filtering.archiveCheckbox);
-export const useActiveCheckbox = () => useSelector((state: RootState) => state.filtering.activeCheckbox);
-export const usePublicCheckbox = () => useSelector((state: RootState) => state.filtering.publicCheckbox);
-export const usePrivateCheckbox = () => useSelector((state: RootState) => state.filtering.privateCheckbox);
-export const useSelectedOrgs = () => useSelector((state: RootState) => state.filtering.selectedOrgs);
+export const useArchiveCheckbox = () => useSelector((state: RootState) => state.settings.filters.archiveCheckbox);
+export const useActiveCheckbox = () => useSelector((state: RootState) => state.settings.filters.activeCheckbox);
+export const usePublicCheckbox = () => useSelector((state: RootState) => state.settings.filters.publicCheckbox);
+export const usePrivateCheckbox = () => useSelector((state: RootState) => state.settings.filters.privateCheckbox);
+export const useSelectedOrgs = () => useSelector((state: RootState) => state.settings.filters.selectedOrgs);
 
 export const {
     setBulkOrgs,
