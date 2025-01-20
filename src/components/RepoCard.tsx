@@ -16,27 +16,12 @@ import {
 } from 'lucide-react';
 import { Repository } from '../types';
 import { formatDistanceToNow } from 'date-fns';
-import { Tooltip } from 'react-tooltip';
 import { useMemo } from 'react';
+import { TooltipIcon } from './ToolTipIcon';
 
-interface RepoCardProps {
+export interface RepoCardProps {
   repo: Repository;
 }
-
-interface TooltipIconProps {
-  id: string;
-  content: string;
-  icon: JSX.Element;
-}
-
-const TooltipIcon = ({ id, content, icon }: TooltipIconProps) => (
-  <>
-    <Tooltip id={id} />
-    <span data-tooltip-id={id} data-tooltip-content={content}>
-      {icon}
-    </span>
-  </>
-);
 
 export function RepoCard({ repo }: RepoCardProps) {
   const readmeTooltipId = useMemo(() => `tooltip-BookOpenCheck-${repo.name}`, [repo]);
