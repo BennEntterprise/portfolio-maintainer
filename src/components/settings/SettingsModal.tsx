@@ -56,18 +56,20 @@ const SettingsModal = () => {
           id='dialog-main'
           className="mt-4">
           <p className="text-gray-700">Enter your GitHub token:</p>
-          <input
-            type="text"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded mt-2"
-          />
-          <button
-            onClick={handleSave}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-          >
-            Save
-          </button>
+            <div className="flex flex-row gap-2">
+            <input
+              type="text"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded mt-2"
+              />
+            <button
+              onClick={handleSave}
+              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
+              >
+              Save
+            </button>
+            </div>
         </div>
         <div>
           <FilteringOptions />
