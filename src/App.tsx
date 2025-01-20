@@ -11,6 +11,7 @@ import Header from "./components/layout/Header";
 import { openSettings } from "./redux/settingsSlice";
 import { SearchAndSortContainer } from "./components/settings/SearchAndSortContainer";
 import RepoResultsContainer from "./components/RepoResultsContainer";
+import { LOCAL_STORAGE_KEYS } from "./utils/localStorage";
 
 function App() {
   const { repos, error, fetchRepos, firstFetchComplete, loading } = useGitHub();
@@ -21,7 +22,7 @@ function App() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = localStorage.getItem("VITE_GITHUB_TOKEN");
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN);
     if (!token) {
       dispatch(openSettings());
     } else {
