@@ -47,6 +47,9 @@ export function RepoCard({ repo }: RepoCardProps) {
   const privateRepoTooltipId = useMemo(() => `tooltip-EyeOff-${repo.name}`, [repo]);
   const publicRepoTooltipId = useMemo(() => `tooltip-EyeIcon-${repo.name}`, [repo]);
   const archivedRepoTooltipId = useMemo(() => `tooltip-Archive-${repo.name}`, [repo]);
+  const gitPullRequestTooltipId = useMemo(() => `tooltip-GitPullRequest-${repo.name}`, [repo]);
+  const starGazerTooltipId = useMemo(() => `tooltip-Star-${repo.name}`, [repo]);
+  const issueCountTooltipId = useMemo(() => `tooltip-CircleDot-${repo.name}`, [repo]);
 
   return (
     <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48">
@@ -58,30 +61,47 @@ export function RepoCard({ repo }: RepoCardProps) {
             icon={<Archive height="1em" />}
           />
         )}
-        <h3 className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex justify-start">
+
+        <h2 className="font-semibold text-blue-600 hover:text-blue-800 flex justify-start">
           <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
             {repo.name}
           </a>
-        </h3>
+        </h2>
+
         <div className="flex items-center space-x-4 text-gray-600">
           {iconConfig.pulls_count && (
             <span className="flex items-center">
-              <GitPullRequest className="w-4 h-4 mr-1" />
+              <TooltipIcon
+                id={gitPullRequestTooltipId}
+                content={`${repo.pulls_count || 0} Pull Requests`}
+                icon={<GitPullRequest className="w-4 h-4 mr-1" />}
+              />
               {repo.pulls_count || 0}
             </span>
           )}
+
           {iconConfig.stargazers_count && (
             <span className="flex items-center">
-              <Star className="w-4 h-4 mr-1" />
+              <TooltipIcon
+                id={starGazerTooltipId}
+                content={`${repo.stargazers_count} Stars`}
+                icon={<Star className="w-4 h-4 mr-1" />}
+              />
               {repo.stargazers_count}
             </span>
           )}
+
           {iconConfig.open_issues_count && (
             <span className="flex items-center">
-              <CircleDot className="w-4 h-4 mr-1" />
+              <TooltipIcon
+                id={issueCountTooltipId}
+                content={`${repo.open_issues_count} Open Issues`}
+                icon={<CircleDot className="w-4 h-4 mr-1" />}
+              />
               {repo.open_issues_count}
             </span>
           )}
+
           {iconConfig.private && repo.private ? (
             <TooltipIcon
               id={privateRepoTooltipId}
