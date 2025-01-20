@@ -1,16 +1,31 @@
-import { useDispatch } from "react-redux";
-import { closeSettings } from "../../redux/settingsSlice";
+// src/components/settings/SettingsModal.tsx
+
+import { useDispatch, useSelector } from "react-redux";
+import { closeSettings, addExcludedRepo, removeExcludedRepo } from "../../redux/settingsSlice";
 import { useCallback, useEffect, useState } from "react";
+import { RootState } from "../../redux/store";
 import { FilteringOptions } from "./FilteringOptions";
 
 const SettingsModal = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState(localStorage.getItem('VITE_GITHUB_TOKEN') || '');
+  const [excludedRepoInput, setExcludedRepoInput] = useState('');
+  const excludedRepos = useSelector((state: RootState) => state.settings.filters.excludedRepos);
 
   const handleSave = () => {
     localStorage.setItem('VITE_GITHUB_TOKEN', token);
     dispatch(closeSettings());
     window.location.reload(); // Reload to fetch repos with the new token
+  };
+
+  const handleAddExcludedRepo = () => {
+    const repos = excludedRepoInput.split(',').map(repo => repo.trim());
+    repos.forEach(repo => dispatch(addExcludedRepo(repo)));
+    setExcludedRepoInput('');
+  };
+
+  const handleRemoveExcludedRepo = (repo: string) => {
+    dispatch(removeExcludedRepo(repo));
   };
 
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
@@ -73,6 +88,37 @@ const SettingsModal = () => {
         </div>
         <div>
           <FilteringOptions />
+        </div>
+        <div>
+          <h3 className="text-gray-700 mt-4">Exclude Repositories:</h3>
+          <div className="flex flex-row gap-2 mt-2">
+            <input
+              type="text"
+              value={excludedRepoInput}
+              onChange={(e) => setExcludedRepoInput(e.target.value)}
+              placeholder="Enter repo names, comma separated"
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+            <button
+              onClick={handleAddExcludedRepo}
+              className="px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              Add
+            </button>
+          </div>
+          <ul className="mt-2">
+            {excludedRepos.map((repo) => (
+              <li key={repo} className="flex justify-between items-center">
+                <span>{repo}</span>
+                <button
+                  onClick={() => handleRemoveExcludedRepo(repo)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

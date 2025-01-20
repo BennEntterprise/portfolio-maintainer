@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import { RootState } from './store';
 
-interface FilterState {
+export interface FilterState {
   archiveCheckbox: boolean;
   activeCheckbox: boolean;
   publicCheckbox: boolean;
   privateCheckbox: boolean;
   selectedOrgs: Record<string, boolean>;
+  excludedRepos: Array<string>;
 }
 
 interface SettingsState {
@@ -19,6 +22,7 @@ const initialFilterState: FilterState = {
   publicCheckbox: true,
   privateCheckbox: true,
   selectedOrgs: {},
+  excludedRepos: []
 };
 
 const initialState: SettingsState = {
@@ -98,8 +102,25 @@ export const settingsSlice = createSlice({
       state.filters.privateCheckbox = action.payload.privateCheckbox;
       state.filters.selectedOrgs = action.payload.selectedOrgs;
     },
+    addExcludedRepo: (state, action: PayloadAction<string>) => {
+      state.filters.excludedRepos.push(action.payload.toLowerCase());
+    },
+    removeExcludedRepo: (state, action: PayloadAction<string>) => {
+      state.filters.excludedRepos = state.filters.excludedRepos.filter(
+        (repo) => repo !== action.payload.toLowerCase( )
+      );
+    },
+    setExcludedRepos: (state, action: PayloadAction<string[]>) => {
+      state.filters.excludedRepos = action.payload;
+    },
   },
 });
+
+export const useArchiveCheckbox = () => useSelector((state: RootState) => state.settings.filters.archiveCheckbox);
+export const useActiveCheckbox = () => useSelector((state: RootState) => state.settings.filters.activeCheckbox);
+export const usePublicCheckbox = () => useSelector((state: RootState) => state.settings.filters.publicCheckbox);
+export const usePrivateCheckbox = () => useSelector((state: RootState) => state.settings.filters.privateCheckbox);
+export const useSelectedOrgs = () => useSelector((state: RootState) => state.settings.filters.selectedOrgs);
 
 export const {
   openSettings,
@@ -114,6 +135,9 @@ export const {
   setBulkOrgs,
   setInitialOrgs,
   setAllFilters,
+  addExcludedRepo,
+  removeExcludedRepo,
+  setExcludedRepos,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

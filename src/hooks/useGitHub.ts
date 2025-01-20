@@ -54,12 +54,11 @@ export function useGitHub() {
     try {
       setLoading(true);
       // HACK: Useful fo debugging with a smaller set of repos
-      const {data} = await octokit.rest.repos.listForAuthenticatedUser({
-        per_page: 5
-      })
-      // const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser)
+      // const {data} = await octokit.rest.repos.listForAuthenticatedUser({
+      //   per_page: 5
+      // })
+      const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser);
 
-      // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
         data.map(async (repo) => {
           const [pulls, fileSearchResultsMap] = await Promise.all([
@@ -72,7 +71,6 @@ export function useGitHub() {
           ]);
 
           return {
-            // Basic Stuff
             id: repo.id,
             name: repo.name,
             updated_at: repo.updated_at,
@@ -83,8 +81,6 @@ export function useGitHub() {
             organization: repo.full_name.split('/')[0],
             open_issues_count: repo.open_issues_count,
             stargazers_count: repo.stargazers_count,
-
-            // Card Stuff
             private: !!repo.private,
             size: repo.size,
             archived: repo.archived,
@@ -110,7 +106,6 @@ export function useGitHub() {
       setError(null);
       setFirstFetchComplete(true)
       dispatch(setInitialOrgs(orgs))
-      // Fetch filterState from localStorage
       const filterState = localStorage.getItem('filterStatus');
       if (filterState) {
         const parsedFilterState = JSON.parse(filterState);

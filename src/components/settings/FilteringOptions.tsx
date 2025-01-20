@@ -14,7 +14,7 @@ import {
   usePublicCheckbox,
   useSelectedOrgs,
   restoreFiltersToTrue,
-} from "../../redux/filteringSlice";
+} from "../../redux/settingsSlice";
 import { useCallback, useEffect, useMemo } from "react";
 import { Repository } from "../../types";
 
