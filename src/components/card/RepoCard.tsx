@@ -23,6 +23,20 @@ export interface RepoCardProps {
   repo: Repository;
 }
 
+const iconConfig = {
+  hasReadme: true,
+  hasTodo: true,
+  license: true,
+  hasDockerfile: true,
+  hasDevcontainer: true,
+  size: true,
+  pulls_count: true,
+  stargazers_count: true,
+  open_issues_count: true,
+  private: true,
+  archived: true,
+};
+
 export function RepoCard({ repo }: RepoCardProps) {
   const readmeTooltipId = useMemo(() => `tooltip-BookOpenCheck-${repo.name}`, [repo]);
   const todoTooltipId = useMemo(() => `tooltip-ListTodo-${repo.name}`, [repo]);
@@ -37,7 +51,7 @@ export function RepoCard({ repo }: RepoCardProps) {
   return (
     <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48">
       <div className="flex justify-between items-center mb-4">
-        {repo.archived && (
+        {iconConfig.archived && repo.archived && (
           <TooltipIcon
             id={archivedRepoTooltipId}
             content="This repo is archived"
@@ -50,19 +64,25 @@ export function RepoCard({ repo }: RepoCardProps) {
           </a>
         </h3>
         <div className="flex items-center space-x-4 text-gray-600">
-          <span className="flex items-center">
-            <GitPullRequest className="w-4 h-4 mr-1" />
-            {repo.pulls_count || 0}
-          </span>
-          <span className="flex items-center">
-            <Star className="w-4 h-4 mr-1" />
-            {repo.stargazers_count}
-          </span>
-          <span className="flex items-center">
-            <CircleDot className="w-4 h-4 mr-1" />
-            {repo.open_issues_count}
-          </span>
-          {repo.private ? (
+          {iconConfig.pulls_count && (
+            <span className="flex items-center">
+              <GitPullRequest className="w-4 h-4 mr-1" />
+              {repo.pulls_count || 0}
+            </span>
+          )}
+          {iconConfig.stargazers_count && (
+            <span className="flex items-center">
+              <Star className="w-4 h-4 mr-1" />
+              {repo.stargazers_count}
+            </span>
+          )}
+          {iconConfig.open_issues_count && (
+            <span className="flex items-center">
+              <CircleDot className="w-4 h-4 mr-1" />
+              {repo.open_issues_count}
+            </span>
+          )}
+          {iconConfig.private && repo.private ? (
             <TooltipIcon
               id={privateRepoTooltipId}
               content="This repo is private"
@@ -82,69 +102,81 @@ export function RepoCard({ repo }: RepoCardProps) {
         <p className="text-gray-600 mb-4">{repo.description}</p>
       )}
 
-      <div className="flex flex-row">
-        <TooltipIcon
-          id={readmeTooltipId}
-          content="README.md"
-          icon={<BookOpenCheck />}
-        />
-        <span className="px-2">{repo.hasReadme ? "✅" : "❌"}</span>
-      </div>
-
-      <div className="flex flex-row">
-        <TooltipIcon
-          id={todoTooltipId}
-          content="TODO.md"
-          icon={<ListTodo />}
-        />
-        <span className="px-2">{repo.hasTodo ? "✅" : "❌"}</span>
-      </div>
-
-      <div className="flex flex-row">
-        <TooltipIcon
-          id={licenseTooltipId}
-          content="License"
-          icon={<Copyright />}
-        />
-        <span className="px-2">{repo.license !== "None" ? "✅" : "❌"}</span>
-      </div>
-
-      <div className="flex flex-row">
-        <TooltipIcon
-          id={dockerizedTooltipId}
-          content="Dockerize with Dockerfile"
-          icon={<Container />}
-        />
-        <span className="px-2">{repo.hasDockerfile ? "✅" : <ShieldQuestion />}</span>
-      </div>
-
-      <div className="flex flex-row">
-        <TooltipIcon
-          id={devcontainerTooltipId}
-          content="Has .devcontainer"
-          icon={<Unplug />}
-        />
-        <span className="px-2">{repo.hasDevcontainer ? "✅" : <ShieldQuestion />}</span>
-      </div>
-
-      <div className="flex justify-between items-center text-sm text-gray-500">
+      {iconConfig.hasReadme && (
         <div className="flex flex-row">
           <TooltipIcon
-            id={sizeTooltipId}
-            content="Size"
-            icon={<MemoryStick />}
+            id={readmeTooltipId}
+            content="README.md"
+            icon={<BookOpenCheck />}
           />
-          <span className="px-2">{repo.size / 1000} KB </span>
+          <span className="px-2">{repo.hasReadme ? "✅" : "❌"}</span>
         </div>
-        <div className="flex items-center justify-end">
-          <Clock className="w-4 h-4 mr-1" />
-          <span>Last updated{" "}
-            {repo.updated_at
-              ? formatDistanceToNow(new Date(repo.updated_at))
-              : "???"}{" "}
-            ago</span>
+      )}
+
+      {iconConfig.hasTodo && (
+        <div className="flex flex-row">
+          <TooltipIcon
+            id={todoTooltipId}
+            content="TODO.md"
+            icon={<ListTodo />}
+          />
+          <span className="px-2">{repo.hasTodo ? "✅" : "❌"}</span>
         </div>
-      </div>
+      )}
+
+      {iconConfig.license && (
+        <div className="flex flex-row">
+          <TooltipIcon
+            id={licenseTooltipId}
+            content="License"
+            icon={<Copyright />}
+          />
+          <span className="px-2">{repo.license !== "None" ? "✅" : "❌"}</span>
+        </div>
+      )}
+
+      {iconConfig.hasDockerfile && (
+        <div className="flex flex-row">
+          <TooltipIcon
+            id={dockerizedTooltipId}
+            content="Dockerize with Dockerfile"
+            icon={<Container />}
+          />
+          <span className="px-2">{repo.hasDockerfile ? "✅" : <ShieldQuestion />}</span>
+        </div>
+      )}
+
+      {iconConfig.hasDevcontainer && (
+        <div className="flex flex-row">
+          <TooltipIcon
+            id={devcontainerTooltipId}
+            content="Has .devcontainer"
+            icon={<Unplug />}
+          />
+          <span className="px-2">{repo.hasDevcontainer ? "✅" : <ShieldQuestion />}</span>
+        </div>
+      )}
+
+      {iconConfig.size && (
+        <div className="flex justify-between items-center text-sm text-gray-500">
+          <div className="flex flex-row">
+            <TooltipIcon
+              id={sizeTooltipId}
+              content="Size"
+              icon={<MemoryStick />}
+            />
+            <span className="px-2">{repo.size / 1000} KB </span>
+          </div>
+          <div className="flex items-center justify-end">
+            <Clock className="w-4 h-4 mr-1" />
+            <span>Last updated{" "}
+              {repo.updated_at
+                ? formatDistanceToNow(new Date(repo.updated_at))
+                : "???"}{" "}
+              ago</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
