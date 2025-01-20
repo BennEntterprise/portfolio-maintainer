@@ -17,7 +17,7 @@ import {
 } from "../../redux/settingsSlice";
 import { useCallback, useEffect, useMemo } from "react";
 import { Repository } from "../../types";
-import { LOCAL_STORAGE_KEYS } from "../../utils/localStorage";
+import { deleteLS, getLS, LOCAL_STORAGE_KEYS, setLS } from "../../utils/localStorage";
 
 export const FilteringOptions = () => {
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ export const FilteringOptions = () => {
 
   // TODO: refactor this into a utility file
   const saveFilterStatusToLocalStorage = () => {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.FILTER_STATUS, JSON.stringify({
+    setLS(LOCAL_STORAGE_KEYS.FILTER_STATUS, JSON.stringify({
       activeCheckbox,
       archiveCheckbox,
       publicCheckbox,
@@ -52,7 +52,7 @@ export const FilteringOptions = () => {
 
   // TODO: refactor this into a utility file
   const loadFilterStatusFromLocalStorage = useCallback( () => {
-    const filterStatus = localStorage.getItem(LOCAL_STORAGE_KEYS.FILTER_STATUS)
+    const filterStatus = getLS(LOCAL_STORAGE_KEYS.FILTER_STATUS)
     if (filterStatus) {
       const filterStatusObj = JSON.parse(filterStatus)
       dispatch(toggleActive(filterStatusObj.activeCheckbox))
@@ -65,8 +65,8 @@ export const FilteringOptions = () => {
 
   // TODO: refactor this into a utility file
   const resetLocalStorageFilters = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.FILTER_STATUS)
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN)
+    deleteLS(LOCAL_STORAGE_KEYS.FILTER_STATUS)
+    deleteLS(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN)
     dispatch(restoreFiltersToTrue());
   }
 

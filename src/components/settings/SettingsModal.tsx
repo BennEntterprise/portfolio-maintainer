@@ -5,15 +5,16 @@ import { closeSettings, addExcludedRepo, removeExcludedRepo } from "../../redux/
 import { useCallback, useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
 import { FilteringOptions } from "./FilteringOptions";
+import { getLS, LOCAL_STORAGE_KEYS, setLS } from "../../utils/localStorage";
 
 const SettingsModal = () => {
   const dispatch = useDispatch();
-  const [token, setToken] = useState(localStorage.getItem('VITE_GITHUB_TOKEN') || '');
+  const [token, setToken] = useState(getLS(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN) || '');
   const [excludedRepoInput, setExcludedRepoInput] = useState('');
   const excludedRepos = useSelector((state: RootState) => state.settings.filters.excludedRepos);
 
   const handleSave = () => {
-    localStorage.setItem('VITE_GITHUB_TOKEN', token);
+    setLS(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN, token);
     dispatch(closeSettings());
     window.location.reload(); // Reload to fetch repos with the new token
   };
