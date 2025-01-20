@@ -14,7 +14,7 @@ import {
   CircleDot,
   ShieldQuestion,
 } from 'lucide-react';
-import { Repository } from '../types';
+import { Repository } from '../../types';
 import { formatDistanceToNow } from 'date-fns';
 import { useMemo } from 'react';
 import { TooltipIcon } from './ToolTipIcon';

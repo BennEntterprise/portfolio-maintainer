@@ -5,11 +5,11 @@ import { setRepos as setReposInRedux } from "./redux/repoSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGitHub } from "./hooks/useGitHub";
-import { Footer } from "./components/Footer";
-import SettingsModal from "./components/SettingsModal";
-import Header from "./components/Header";
+import { Footer } from "./components/layout/Footer";
+import SettingsModal from "./components/settings/SettingsModal";
+import Header from "./components/layout/Header";
 import { openSettings } from "./redux/settingsSlice";
-import { SearchAndSortContainer } from "./components/SearchAndSortContainer";
+import { SearchAndSortContainer } from "./components/settings/SearchAndSortContainer";
 import RepoResultsContainer from "./components/RepoResultsContainer";
 
 function App() {

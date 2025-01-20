@@ -1,4 +1,4 @@
-import { toggleSettings } from '../redux/settingsSlice'
+import { toggleSettings } from '../../redux/settingsSlice'
 import { useDispatch } from "react-redux";
 import { Github, Settings as SettingsCog } from "lucide-react";
 

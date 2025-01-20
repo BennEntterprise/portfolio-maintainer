@@ -4,7 +4,7 @@ import { selectSearchedRepos } from "../redux/repoSlice";
 import { selectedSortOption } from "../redux/sortingSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { RepoCard } from "./RepoCard";
+import { RepoCard } from "./card/RepoCard";
 
 const RepoResultsContainer = () => {
   const [entriesPerPage, setEntriesPerPage] = useState(10);

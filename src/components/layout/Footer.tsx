@@ -1,5 +1,5 @@
 import { Settings as SettingsCog } from 'lucide-react'
-import { toggleSettings } from '../redux/settingsSlice'
+import { toggleSettings } from '../../redux/settingsSlice'
 import { useDispatch } from 'react-redux'
 
 export const Footer = () => {

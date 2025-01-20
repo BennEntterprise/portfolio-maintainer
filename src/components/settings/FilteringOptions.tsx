@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
 import {
   setInitialOrgs,
   setBulkOrgs,
@@ -14,8 +14,9 @@ import {
   usePublicCheckbox,
   useSelectedOrgs,
   restoreFiltersToTrue,
-} from "../redux/filteringSlice";
+} from "../../redux/filteringSlice";
 import { useCallback, useEffect, useMemo } from "react";
+import { Repository } from "../../types";
 
 export const FilteringOptions = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export const FilteringOptions = () => {
   const selectedOrgs = useSelectedOrgs()
 
   const availableOrgsList = useMemo(() => {
-    const orgs = reposRedux.reduce((acc: string[], repo) => {
+    const orgs = reposRedux.reduce((acc: string[], repo: Repository) => {
       const orgName = repo.full_name.split("/")[0];
       if (!acc.includes(orgName)) {
         acc.push(orgName);

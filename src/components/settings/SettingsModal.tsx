@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { closeSettings } from "../redux/settingsSlice";
+import { closeSettings } from "../../redux/settingsSlice";
 import { useState } from "react";
 import { FilteringOptions } from "./FilteringOptions";
 

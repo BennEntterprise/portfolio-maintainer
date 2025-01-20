@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import { SearchBar } from "./SearchBar";
-import { SortSelect } from "./SortSelect";
-import { RootState } from "../redux/store";
+import { SearchBar } from "../SearchBar";
+import { SortSelect } from "../SortSelect";
+import { RootState } from "../../redux/store";
 import { useCallback } from "react";
-import { setSearchTerm } from "../redux/searchSlice";
-import { SortOption } from "../types";
-import { setSort } from "../redux/sortingSlice";
+import { setSearchTerm } from "../../redux/searchSlice";
+import { SortOption } from "../../types";
+import { setSort } from "../../redux/sortingSlice";
 
 export const SearchAndSortContainer = () => {
   const searchTerm = useSelector((state: RootState) => state.search.searchTerm);

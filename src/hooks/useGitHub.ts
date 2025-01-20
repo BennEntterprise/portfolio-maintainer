@@ -54,10 +54,10 @@ export function useGitHub() {
     try {
       setLoading(true);
       // HACK: Useful fo debugging with a smaller set of repos
-      // const {data} = await  octokit.rest.repos.listForAuthenticatedUser({
-      //   per_page: 5
-      // })
-      const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser)
+      const {data} = await octokit.rest.repos.listForAuthenticatedUser({
+        per_page: 5
+      })
+      // const data = await octokit.paginate(octokit.rest.repos.listForAuthenticatedUser)
 
       // Fetch pull requests count and README for each repo
       const reposWithDetails = await Promise.all(
