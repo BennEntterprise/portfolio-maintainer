@@ -107,7 +107,7 @@ export function useGitHub() {
       setError(null);
       setFirstFetchComplete(true)
       dispatch(setInitialOrgs(orgs))
-      const filterState = getLS(LOCAL_STORAGE_KEYS.FILTER_STATUS);
+      const filterState = getLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS);
       if (filterState) {
         const parsedFilterState = JSON.parse(filterState);
         dispatch(setAllFilters(parsedFilterState));

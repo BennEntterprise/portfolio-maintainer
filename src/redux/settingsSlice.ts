@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
+import { getLS, LOCAL_STORAGE_KEYS } from '../utils/localStorage';
 
 export interface FilterState {
   archiveCheckbox: boolean;
@@ -16,14 +17,32 @@ interface SettingsState {
   filters: FilterState;
 }
 
-const initialFilterState: FilterState = {
-  archiveCheckbox: true,
-  activeCheckbox: true,
-  publicCheckbox: true,
-  privateCheckbox: true,
-  selectedOrgs: {},
-  excludedRepos: []
-};
+let initialFilterState: FilterState;
+const savedSettings = getLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS);
+
+if(!savedSettings) {
+  initialFilterState = {
+    archiveCheckbox: true,
+    activeCheckbox: true,
+    publicCheckbox: true,
+    privateCheckbox: true,
+    selectedOrgs: {},
+    excludedRepos: []
+  };
+} else {
+  if(savedSettings !== null) {
+    initialFilterState = JSON.parse(savedSettings);
+  } else {
+    initialFilterState = {
+      archiveCheckbox: true,
+      activeCheckbox: true,
+      publicCheckbox: true,
+      privateCheckbox: true,
+      selectedOrgs: {},
+      excludedRepos: []
+    };
+  }
+}
 
 const initialState: SettingsState = {
   settingModalOpen: false,

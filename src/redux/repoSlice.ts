@@ -37,7 +37,7 @@ export const selectFilteredRepos = createSelector(
       const isPublic = !filterState.publicCheckbox && !repo.private;
       const isPrivate = !filterState.privateCheckbox && repo.private;
       const isOrgSelected = !filterState.selectedOrgs[repo.organization || ""];
-      const isExcluded = filterState.excludedRepos.includes(repo.name.toLowerCase());
+      const isExcluded = filterState.excludedRepos?.includes(repo.name.toLowerCase());
 
       return !(
         isArchived ||

@@ -41,7 +41,7 @@ export const FilteringOptions = () => {
 
   // TODO: refactor this into a utility file
   const saveFilterStatusToLocalStorage = () => {
-    setLS(LOCAL_STORAGE_KEYS.FILTER_STATUS, JSON.stringify({
+    setLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS, JSON.stringify({
       activeCheckbox,
       archiveCheckbox,
       publicCheckbox,
@@ -52,7 +52,7 @@ export const FilteringOptions = () => {
 
   // TODO: refactor this into a utility file
   const loadFilterStatusFromLocalStorage = useCallback( () => {
-    const filterStatus = getLS(LOCAL_STORAGE_KEYS.FILTER_STATUS)
+    const filterStatus = getLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS)
     if (filterStatus) {
       const filterStatusObj = JSON.parse(filterStatus)
       dispatch(toggleActive(filterStatusObj.activeCheckbox))
@@ -65,7 +65,7 @@ export const FilteringOptions = () => {
 
   // TODO: refactor this into a utility file
   const resetLocalStorageFilters = () => {
-    deleteLS(LOCAL_STORAGE_KEYS.FILTER_STATUS)
+    deleteLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS)
     deleteLS(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN)
     dispatch(restoreFiltersToTrue());
   }

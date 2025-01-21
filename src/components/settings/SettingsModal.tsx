@@ -108,7 +108,7 @@ const SettingsModal = () => {
             </button>
           </div>
           <ul className="mt-2">
-            {excludedRepos.map((repo) => (
+            {excludedRepos?.map((repo) => (
               <li key={repo} className="flex justify-between items-center">
                 <span>{repo}</span>
                 <button
