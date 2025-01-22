@@ -12,7 +12,7 @@ const SettingsModal = () => {
   const excludedRepos = useSelector((state: RootState) => state.settings.filters.excludedRepos);
   const resultsPerPage = useSelector((state: RootState) => state.settings.resultsPerPage);
 
-  const handleSave = () => {
+  const handleSaveToken = () => {
     setLS(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN, token);
     dispatch(closeSettings());
     window.location.reload(); // Reload to fetch repos with the new token
@@ -79,7 +79,7 @@ const SettingsModal = () => {
               className="w-full p-2 border border-gray-300 rounded mt-2"
               />
             <button
-              onClick={handleSave}
+              onClick={handleSaveToken}
               className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
               >
               Save
