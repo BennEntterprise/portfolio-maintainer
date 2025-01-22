@@ -13,11 +13,14 @@ import {
   Archive,
   CircleDot,
   ShieldQuestion,
+  AlarmClockOff,
 } from 'lucide-react';
 import { Repository } from '../../types';
 import { formatDistanceToNow } from 'date-fns';
 import { useMemo } from 'react';
 import { TooltipIcon } from './ToolTipIcon';
+import { useDispatch } from 'react-redux';
+import { addExcludedRepo } from '../../redux/settingsSlice';
 
 export interface RepoCardProps {
   repo: Repository;
@@ -38,6 +41,7 @@ const iconConfig = {
 };
 
 export function RepoCard({ repo }: RepoCardProps) {
+  const dispatch = useDispatch();
   const readmeTooltipId = useMemo(() => `tooltip-BookOpenCheck-${repo.name}`, [repo]);
   const todoTooltipId = useMemo(() => `tooltip-ListTodo-${repo.name}`, [repo]);
   const licenseTooltipId = useMemo(() => `tooltip-Copyright-${repo.name}`, [repo]);
@@ -50,6 +54,7 @@ export function RepoCard({ repo }: RepoCardProps) {
   const gitPullRequestTooltipId = useMemo(() => `tooltip-GitPullRequest-${repo.name}`, [repo]);
   const starGazerTooltipId = useMemo(() => `tooltip-Star-${repo.name}`, [repo]);
   const issueCountTooltipId = useMemo(() => `tooltip-CircleDot-${repo.name}`, [repo]);
+  const AlarmClockOffTooltipId = useMemo(() => `tooltip-AlarmClockOff-${repo.name}`, [repo]);
 
   return (
     <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48">
@@ -63,6 +68,14 @@ export function RepoCard({ repo }: RepoCardProps) {
         )}
 
         <h2 className="font-semibold text-blue-600 hover:text-blue-800 flex justify-start">
+          <TooltipIcon
+            id={AlarmClockOffTooltipId}
+            content="Last updated"
+            icon={<AlarmClockOff className="w-4 h-4 mr-1" onClick={() => {
+              alert('hello');
+              dispatch(addExcludedRepo(repo.name))}
+            }/>}
+            />
           <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
             {repo.name}
           </a>
