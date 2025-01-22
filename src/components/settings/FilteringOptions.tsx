@@ -175,21 +175,21 @@ export const FilteringOptions = () => {
           type="button"
           onClick={saveFilterStatusToLocalStorage}
         >
-          Save
+          Save All Except Token
         </button>
-        <button
+        {/* <button
           className="inline-flex w-full justify-center rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 sm:ml-3 sm:w-auto"
           type="button"
           onClick={loadFilterStatusFromLocalStorage}
         >
           Load
-        </button>
+        </button> */}
         <button
           className="inline-flex w-full justify-center rounded-md bg-rose-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
           type="button"
           onClick={resetLocalStorageFilters}
         >
-          Reset
+          Reset All (Including Token)
         </button>
       </div>
     </div>
