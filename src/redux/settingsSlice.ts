@@ -15,6 +15,7 @@ export interface FilterState {
 interface SettingsState {
   settingModalOpen: boolean;
   filters: FilterState;
+  resultsPerPage: number; // Add this line
 }
 
 let initialFilterState: FilterState;
@@ -47,6 +48,7 @@ if(!savedSettings) {
 const initialState: SettingsState = {
   settingModalOpen: false,
   filters: initialFilterState,
+  resultsPerPage: 25, // Add this line
 };
 
 export const settingsSlice = createSlice({
@@ -132,6 +134,9 @@ export const settingsSlice = createSlice({
     setExcludedRepos: (state, action: PayloadAction<string[]>) => {
       state.filters.excludedRepos = action.payload;
     },
+    setResultsPerPage: (state, action: PayloadAction<number>) => {
+      state.resultsPerPage = action.payload;
+    },
   },
 });
 
@@ -157,6 +162,7 @@ export const {
   addExcludedRepo,
   removeExcludedRepo,
   setExcludedRepos,
+  setResultsPerPage,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

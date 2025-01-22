@@ -1,7 +1,5 @@
-// src/components/settings/SettingsModal.tsx
-
 import { useDispatch, useSelector } from "react-redux";
-import { closeSettings, addExcludedRepo, removeExcludedRepo } from "../../redux/settingsSlice";
+import { closeSettings, addExcludedRepo, removeExcludedRepo, setResultsPerPage } from "../../redux/settingsSlice";
 import { useCallback, useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
 import { FilteringOptions } from "./FilteringOptions";
@@ -12,6 +10,7 @@ const SettingsModal = () => {
   const [token, setToken] = useState(getLS(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN) || '');
   const [excludedRepoInput, setExcludedRepoInput] = useState('');
   const excludedRepos = useSelector((state: RootState) => state.settings.filters.excludedRepos);
+  const resultsPerPage = useSelector((state: RootState) => state.settings.resultsPerPage);
 
   const handleSave = () => {
     setLS(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN, token);
@@ -120,6 +119,20 @@ const SettingsModal = () => {
               </li>
             ))}
           </ul>
+        </div>
+        <div>
+          <h3 className="text-gray-700 mt-4">Results Per Page:</h3>
+          <select
+            value={resultsPerPage}
+            onChange={(e) => dispatch(setResultsPerPage(Number(e.target.value)))}
+            className="w-full p-2 border border-gray-300 rounded"
+          >
+            {[10, 25, 50, 100].map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
     </div>
