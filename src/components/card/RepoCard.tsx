@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Repository } from '../../types';
 import { formatDistanceToNow } from 'date-fns';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { TooltipIcon } from './ToolTipIcon';
 import { useDispatch } from 'react-redux';
 import { addExcludedRepo } from '../../redux/settingsSlice';
@@ -56,6 +56,10 @@ export function RepoCard({ repo }: RepoCardProps) {
   const issueCountTooltipId = useMemo(() => `tooltip-CircleDot-${repo.name}`, [repo]);
   const AlarmClockOffTooltipId = useMemo(() => `tooltip-AlarmClockOff-${repo.name}`, [repo]);
 
+  const handleSnooze = useCallback(() => {
+    dispatch(addExcludedRepo(repo.name))
+  }, [dispatch, repo.name])
+
   return (
     <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48">
       <div className="flex justify-between items-center mb-4">
@@ -71,10 +75,7 @@ export function RepoCard({ repo }: RepoCardProps) {
           <TooltipIcon
             id={AlarmClockOffTooltipId}
             content="Last updated"
-            icon={<AlarmClockOff className="w-4 h-4 mr-1" onClick={() => {
-              alert('hello');
-              dispatch(addExcludedRepo(repo.name))}
-            }/>}
+            icon={<AlarmClockOff className="w-4 h-4 mr-1" onClick={handleSnooze} />}
             />
           <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
             {repo.name}

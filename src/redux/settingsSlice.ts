@@ -33,6 +33,7 @@ if(!savedSettings) {
 } else {
   if(savedSettings !== null) {
     initialFilterState = JSON.parse(savedSettings);
+    initialFilterState.excludedRepos = initialFilterState.excludedRepos || [];
   } else {
     initialFilterState = {
       archiveCheckbox: true,
@@ -124,7 +125,7 @@ export const settingsSlice = createSlice({
       state.filters.selectedOrgs = action.payload.selectedOrgs;
     },
     addExcludedRepo: (state, action: PayloadAction<string>) => {
-      state.filters.excludedRepos.push(action.payload.toLowerCase());
+      state.filters.excludedRepos?.push(action.payload.toLowerCase());
     },
     removeExcludedRepo: (state, action: PayloadAction<string>) => {
       state.filters.excludedRepos = state.filters.excludedRepos.filter(
