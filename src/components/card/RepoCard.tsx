@@ -61,7 +61,10 @@ export function RepoCard({ repo }: RepoCardProps) {
   }, [dispatch, repo.name])
 
   return (
-    <div className="flex flex-col justify-between h-full bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48">
+    <div
+      className="flex flex-col justify-between h-full bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow min-h-48"
+      style={{ backgroundColor: "var(--component-bg-color)"}}
+    >
       <div className="flex justify-between items-center mb-4">
         {iconConfig.archived && repo.archived && (
           <TooltipIcon

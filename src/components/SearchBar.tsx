@@ -15,6 +15,7 @@ export function SearchBar({ searchTerm, onSearchChange }: SearchBarProps) {
         onChange={(e) => onSearchChange(e.target.value)}
         placeholder="Search repositories..."
         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        style={{ backgroundColor: 'var(--component-bg-color)' }}
       />
     </div>
   );

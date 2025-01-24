@@ -17,6 +17,7 @@ export function SortSelect({ options, selectedSort, onSortChange }: SortSelectPr
         if (option) onSortChange(option);
       }}
       className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      style={{ backgroundColor: "var(--component-bg-color)" }}
     >
       {options.map((option) => (
         <option

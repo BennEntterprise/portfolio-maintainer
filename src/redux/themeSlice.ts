@@ -10,7 +10,6 @@ const initialState: ThemeState = {
   value: systemTheme
 };
 
-alert(`Initial theme: ${initialState.value}`); // Debugging line
 export const themeSlice = createSlice({
   name: "theme",
   initialState,
