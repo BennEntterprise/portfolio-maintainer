@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a202c;
+  --text-color: #ffffff;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
 
 /* An animation that spins a loading icon indefinitely */
 @keyframes spin {
@@ -15,4 +29,4 @@
 
 .loading {
   animation: spin 1s linear infinite;
-} 
+}
