@@ -5,11 +5,13 @@
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
+  --component-bg-color: #f9fafb; /* Light background for components */
 }
 
 [data-theme="dark"] {
   --bg-color: #1a202c;
   --text-color: #ffffff;
+  --component-bg-color: #2d3748; /* Dark background for components */
 }
 
 body {
