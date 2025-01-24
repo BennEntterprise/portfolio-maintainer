@@ -22,6 +22,7 @@ import {
 import { RootState } from "../../redux/store";
 import { Repository } from "../../types";
 import { deleteLS, getLS, LOCAL_STORAGE_KEYS, setLS } from "../../utils/localStorage";
+import { toggleTheme } from "../../redux/themeSlice"; // Import the toggleTheme action
 
 const SettingsModal = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const SettingsModal = () => {
   const publicCheckbox = usePublicCheckbox()
   const privateCheckbox = usePrivateCheckbox()
   const selectedOrgs = useSelectedOrgs()
+  const theme = useSelector((state: RootState) => state.theme.value);
 
   const availableOrgsList = useMemo(() => {
     const orgs = reposRedux.reduce((acc: string[], repo: Repository) => {
@@ -156,6 +158,18 @@ const SettingsModal = () => {
               Save
             </button>
             </div>
+        </div>
+        <div id="theme-toggle" className="my-4">
+          <h3 className="text-gray-700">Theme:</h3>
+          <label className="flex items-center mt-2">
+            <input
+              type="checkbox"
+              checked={theme === "dark"}
+              onChange={() => dispatch(toggleTheme())}
+              className="mr-2"
+            />
+            <span className="text-gray-700">Dark Mode</span>
+          </label>
         </div>
         <div
       id="filtering-options"

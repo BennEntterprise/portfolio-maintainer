@@ -1,9 +1,8 @@
-import "react-tooltip/dist/react-tooltip.css";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader2Icon } from "lucide-react";
 import { RootState } from "./redux/store";
 import { setRepos as setReposInRedux } from "./redux/repoSlice";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useGitHub } from "./hooks/useGitHub";
 import { Footer } from "./components/layout/Footer";
 import SettingsModal from "./components/settings/SettingsModal";
@@ -12,6 +11,7 @@ import { openSettings } from "./redux/settingsSlice";
 import { SearchAndSortContainer } from "./components/settings/SearchAndSortContainer";
 import RepoResultsContainer from "./components/RepoResultsContainer";
 import { getLS, LOCAL_STORAGE_KEYS } from "./utils/localStorage";
+import { selectTheme } from "./redux/themeSlice";
 
 function App() {
   const { repos, error, fetchRepos, firstFetchComplete, loading } = useGitHub();
@@ -19,6 +19,7 @@ function App() {
     (state: RootState) => state.settings.settingModalOpen
   );
   const reposRedux = useSelector((state: RootState) => state.repo.value);
+  const theme = useSelector(selectTheme);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -34,6 +35,10 @@ function App() {
   useEffect(() => {
     dispatch(setReposInRedux(repos));
   }, [dispatch, repos]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   if (error) {
     return (
