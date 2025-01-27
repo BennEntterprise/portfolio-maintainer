@@ -1,3 +1,5 @@
+import { preActionLogger } from './middleware/preActionLogger';
+import { postActionLogger } from './middleware/postActionLogger';
 import searchSlice from './searchSlice';
 import { configureStore } from '@reduxjs/toolkit'
 import repoReducer from './repoSlice'
@@ -13,6 +15,7 @@ export const store = configureStore({
     sorting: sortingSlice,
     theme: themeSlice,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(preActionLogger, postActionLogger)
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
