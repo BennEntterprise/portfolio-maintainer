@@ -19,6 +19,13 @@ body {
   color: var(--text-color);
 }
 
+a {
+  [data-theme="dark"] & {
+    color: var(--text-color);
+  }
+  color: blue;
+}
+
 /* An animation that spins a loading icon indefinitely */
 @keyframes spin {
   0% {

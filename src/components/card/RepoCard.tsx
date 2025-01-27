@@ -87,33 +87,33 @@ export function RepoCard({ repo }: RepoCardProps) {
 
         <div className="flex items-center space-x-4 text-gray-600">
           {iconConfig.pulls_count && (
-            <span className="flex items-center">
+            <span className="flex items-center" style={{ color: "var(--text-color)"}}>
               <TooltipIcon
                 id={gitPullRequestTooltipId}
                 content={`${repo.pulls_count || 0} Pull Requests`}
-                icon={<GitPullRequest className="w-4 h-4 mr-1" />}
+                icon={<GitPullRequest className="w-4 h-4 mr-1" style={{ color: "var(--text-color)"}}/>}
               />
               {repo.pulls_count || 0}
             </span>
           )}
 
           {iconConfig.stargazers_count && (
-            <span className="flex items-center">
+            <span className="flex items-center" style={{ color: "var(--text-color)"}}>
               <TooltipIcon
                 id={starGazerTooltipId}
                 content={`${repo.stargazers_count} Stars`}
-                icon={<Star className="w-4 h-4 mr-1" />}
+                icon={<Star className="w-4 h-4 mr-1" style={{ color: "var(--text-color)"}}/>}
               />
               {repo.stargazers_count}
             </span>
           )}
 
           {iconConfig.open_issues_count && (
-            <span className="flex items-center">
+            <span className="flex items-center" style={{ color: "var(--text-color)"}}>
               <TooltipIcon
                 id={issueCountTooltipId}
                 content={`${repo.open_issues_count} Open Issues`}
-                icon={<CircleDot className="w-4 h-4 mr-1" />}
+                icon={<CircleDot className="w-4 h-4 mr-1" style={{ color: "var(--text-color)"}} />}
               />
               {repo.open_issues_count}
             </span>
@@ -123,20 +123,20 @@ export function RepoCard({ repo }: RepoCardProps) {
             <TooltipIcon
               id={privateRepoTooltipId}
               content="This repo is private"
-              icon={<EyeOff height="1em" />}
+              icon={<EyeOff height="1em" style={{ color: "var(--text-color)"}}/>}
             />
           ) : (
             <TooltipIcon
               id={publicRepoTooltipId}
               content="This repo is public"
-              icon={<EyeIcon height="1em" />}
+              icon={<EyeIcon height="1em" style={{ color: "var(--text-color)"}}/>}
             />
           )}
         </div>
       </div>
 
       {repo.description && (
-        <p className="text-gray-600 mb-4">{repo.description}</p>
+        <p className="text-gray-600 mb-4" style={{ color: "var(--text-color)"}}>{repo.description}</p>
       )}
 
       {iconConfig.hasReadme && (
