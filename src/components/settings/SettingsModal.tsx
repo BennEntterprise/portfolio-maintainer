@@ -18,12 +18,14 @@ import {
   usePrivateCheckbox,
   usePublicCheckbox,
   useSelectedOrgs,
+  useSettings,
 } from "../../redux/settingsSlice";
 import { RootState } from "../../redux/store";
 import { Repository } from "../../types";
 import {
   deleteLS,
   getLS,
+  getSettingsLS,
   LOCAL_STORAGE_KEYS,
   setLS,
 } from "../../utils/localStorage";
@@ -31,6 +33,7 @@ import { toggleTheme } from "../../redux/themeSlice"; // Import the toggleTheme 
 
 const SettingsModal = () => {
   const dispatch = useDispatch();
+  const settingsState = useSettings();
   const [token, setToken] = useState(
     getLS(LOCAL_STORAGE_KEYS.VITE_GITHUB_TOKEN) || ""
   );
@@ -61,24 +64,19 @@ const SettingsModal = () => {
   }, [reposRedux]);
 
   // TODO: refactor this into a utility file
-  const saveFilterStatusToLocalStorage = () => {
+  const saveFilterStatusToLocalStorage = useCallback(() => {
     setLS(
       LOCAL_STORAGE_KEYS.SAVED_SETTINGS,
-      JSON.stringify({
-        activeCheckbox,
-        archiveCheckbox,
-        publicCheckbox,
-        privateCheckbox,
-        selectedOrgs,
-      })
+      JSON.stringify(settingsState)
     );
-  };
+  },[settingsState]);
 
   // TODO: refactor this into a utility file
   const loadFilterStatusFromLocalStorage = useCallback(() => {
-    const filterStatus = getLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS);
-    if (filterStatus) {
-      const filterStatusObj = JSON.parse(filterStatus);
+    const settingsState = getSettingsLS()
+
+    if (settingsState) {
+      const filterStatusObj = settingsState.filters
       dispatch(toggleActive(filterStatusObj.activeCheckbox));
       dispatch(toggleArchive(filterStatusObj.archiveCheckbox));
       dispatch(togglePublic(filterStatusObj.publicCheckbox));
