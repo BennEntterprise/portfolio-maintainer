@@ -1,3 +1,5 @@
+import { SettingsState, SettingsSchema } from '../redux/settingsSlice'
+
 export const LOCAL_STORAGE_KEYS = {
   SAVED_SETTINGS: 'SAVED_SETTINGS',
   VITE_GITHUB_TOKEN: 'VITE_GITHUB_TOKEN',
@@ -29,4 +31,16 @@ export const setLS = (key: LocalStorageKey, value: string) => {
  */
 export const deleteLS = (key: LocalStorageKey) => {
   localStorage.removeItem(key)
+}
+
+export const getSettingsLS = (): SettingsState => {
+  const settings = getLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS)
+  let parsed;
+  try {
+    parsed = SettingsSchema.parse(settings)
+  } catch (error) {
+    console.error('Error parsing settings from local storage:', error)
+    alert('Error parsing settings from local storage. Please check the console for more information.')
+  }
+  return parsed as SettingsState;
 }

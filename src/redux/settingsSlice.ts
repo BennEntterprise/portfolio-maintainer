@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import { getLS, LOCAL_STORAGE_KEYS } from '../utils/localStorage';
-
+import { z } from 'zod';
 export interface FilterState {
   archiveCheckbox: boolean;
   activeCheckbox: boolean;
@@ -12,11 +12,24 @@ export interface FilterState {
   excludedRepos: Array<string>;
 }
 
-interface SettingsState {
+export interface SettingsState {
   settingModalOpen: boolean;
   filters: FilterState;
-  resultsPerPage: number; // Add this line
+  resultsPerPage: number;
 }
+
+export const SettingsSchema = z.object({
+  settingModalOpen: z.boolean(),
+  filters: z.object({
+    archiveCheckbox: z.boolean(),
+    activeCheckbox: z.boolean(),
+    publicCheckbox: z.boolean(),
+    privateCheckbox: z.boolean(),
+    selectedOrgs: z.record(z.boolean()),
+    excludedRepos: z.array(z.string())
+  }),
+  resultsPerPage: z.number(),
+})
 
 let initialFilterState: FilterState;
 const savedSettings = getLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS);
