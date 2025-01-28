@@ -40,7 +40,7 @@ export const getSettingsLS = (): SettingsState => {
     parsed = SettingsSchema.parse(settings)
   } catch (error) {
     console.error('Error parsing settings from local storage:', error)
-    alert('Error parsing settings from local storage. Please check the console for more information.')
+    // alert('Error parsing settings from local storage. Please check the console for more information.')
   }
   return parsed as SettingsState;
 }

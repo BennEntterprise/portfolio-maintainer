@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
-import { getLS, LOCAL_STORAGE_KEYS } from '../utils/localStorage';
+import { getSettingsLS } from '../utils/localStorage';
 import { z } from 'zod';
 export interface FilterState {
   archiveCheckbox: boolean;
@@ -32,7 +32,7 @@ export const SettingsSchema = z.object({
 })
 
 let initialFilterState: FilterState;
-const savedSettings = getLS(LOCAL_STORAGE_KEYS.SAVED_SETTINGS);
+const savedSettings = getSettingsLS();
 
 if(!savedSettings) {
   initialFilterState = {
@@ -45,7 +45,7 @@ if(!savedSettings) {
   };
 } else {
   if(savedSettings !== null) {
-    initialFilterState = JSON.parse(savedSettings);
+    initialFilterState = savedSettings.filters
     initialFilterState.excludedRepos = initialFilterState.excludedRepos || [];
   } else {
     initialFilterState = {
@@ -154,6 +154,7 @@ export const settingsSlice = createSlice({
   },
 });
 
+export const useSettings = () => useSelector((state: RootState) => state.settings);
 export const useArchiveCheckbox = () => useSelector((state: RootState) => state.settings.filters.archiveCheckbox);
 export const useActiveCheckbox = () => useSelector((state: RootState) => state.settings.filters.activeCheckbox);
 export const usePublicCheckbox = () => useSelector((state: RootState) => state.settings.filters.publicCheckbox);
