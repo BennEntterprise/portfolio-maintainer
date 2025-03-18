@@ -1,2 +1,2 @@
-npm run build
-npm run lint-staged
+(cd monolith-app/frontend && npm run build)
+(cd monolith-app/frontend npm run lint-staged)
