@@ -1,14 +1,5 @@
 import express from 'express';
-import {z } from 'zod';
-
-const envSchema = z.object({
-  PORT: z.string().default('3000'),
-  HOST: z.string().default('localhost'),
-});
-
-const env = envSchema.parse(process.env);
-type envTypes = z.infer<typeof envSchema>;
-
+import env from './src/config/env';
 
 const app = express();
 
