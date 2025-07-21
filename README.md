@@ -1,5 +1,7 @@
 # Portfolio Maintainer
 
+## Intro
+
 This repo will help me constantly keep my Github portfolio up-to-date. It is intended to be a locally-run react app, which helps identify things like
 
 - What is the "least touched" project?
@@ -7,8 +9,19 @@ This repo will help me constantly keep my Github portfolio up-to-date. It is int
 
 It is meant to be a tool for a user (in this case me) to bring their own Github Keys, spin up a Docker project and answer the question "what should I work on today?"
 
-
 A React application to browse and analyze your GitHub repositories with advanced sorting and searching capabilities.
+
+## Quick start
+
+The current WIP is on the electron app. 
+
+```
+cd electron-app
+npm i
+npm run dev
+```
+
+For more See [Electron App Readme](./electron-app/README.md)
 
 ## Features
 

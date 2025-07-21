@@ -13,7 +13,11 @@ function App() {
     console.log("Render process for App.tsx (first load) is running");
   }, []);
 
-  return <h1>TEST RENDERER</h1>;
+  return <SecondComponent />;
 }
 
 export default App;
+
+const SecondComponent = () => {
+  return <h2>Second Edited Component</h2>;
+};
