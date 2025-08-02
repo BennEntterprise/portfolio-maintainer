@@ -1,21 +1,42 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
 
+// Enable live reload for Electron in development
+if (process.env.NODE_ENV === "development") {
+  require("electron-reload")(__dirname, {
+    electron: path.join(
+      __dirname,
+      "..",
+      "..",
+      "node_modules",
+      ".bin",
+      "electron"
+    ),
+    hardResetMethod: "exit",
+  });
+}
+
 // Start Express server
 import "../server/api";
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
     },
   });
 
-  // Load React app (assumes built files in /public)
-  win.loadFile(path.join(__dirname, "../../dist/renderer/index.html"));
+  // In development, load from Vite dev server, otherwise load built files
+  if (process.env.NODE_ENV === "development") {
+    win.loadURL("http://localhost:5173");
+    // Open DevTools in development
+    win.webContents.openDevTools();
+  } else {
+    win.loadFile(path.join(__dirname, "../../dist/renderer/index.html"));
+  }
 }
 
 app.whenReady().then(createWindow);
