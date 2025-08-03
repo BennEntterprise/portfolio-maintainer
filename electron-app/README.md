@@ -1,5 +1,9 @@
 # Portfolio Maintainer 
 
+This is being managed with [backlog.md](https://github.com/MrLesk/Backlog.md?&aid=rec0STTpsH2WsVaY0)
+
+`npx backlog board view`
+
 This project does not yet have HMR. So for best results open two terminal. 
 
 The first runs the app: 
