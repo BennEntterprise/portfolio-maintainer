@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "build:main": "tsc",
     "build:renderer": "vite build",
+    "backlog": "npx backlog browser",
     "dev": "concurrently \"npm run dev:vite\" \"npm run dev:main\" \"npm run dev:electron\"",
     "dev:vite": "vite",
     "dev:main": "tsc -w",

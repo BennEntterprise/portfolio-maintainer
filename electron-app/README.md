@@ -2,7 +2,7 @@
 
 This is being managed with [backlog.md](https://github.com/MrLesk/Backlog.md?&aid=rec0STTpsH2WsVaY0)
 
-`npx backlog board view`
+`npm run backlog`
 
 This project does not yet have HMR. So for best results open two terminal. 
 
