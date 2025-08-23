@@ -44,3 +44,14 @@ app.whenReady().then(createWindow);
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
+
+// Graceful shutdown for exit signals
+function shutdown() {
+  // Add any cleanup logic here, such as closing windows or saving state
+  console.log("Shutting down Electron main process gracefully...");
+  app.quit();
+}
+
+process.on("SIGINT", shutdown); // Ctrl+C
+process.on("SIGTERM", shutdown); // kill command
+process.on("SIGQUIT", shutdown); // quit signal
