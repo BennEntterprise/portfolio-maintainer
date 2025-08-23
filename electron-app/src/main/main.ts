@@ -39,7 +39,20 @@ function createWindow() {
   }
 }
 
-app.whenReady().then(createWindow);
+let windowCreated = false;
+
+app.whenReady().then(() => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
+});
+
+// On macOS, re-create a window when the dock icon is clicked and there are no other windows open
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
